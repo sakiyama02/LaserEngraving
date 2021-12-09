@@ -13,9 +13,9 @@ class Laser : public Device{
 	Laser();
 	~Laser();
 
-	int Run(int arg);
-	int Stop(void);
-	int Init(void);
+	int run(int arg);
+	int stop(void);
+	int init(void);
 
 	protected:
 	private:

@@ -3,6 +3,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -15,12 +16,13 @@ class SteppingMotor {
     public:
         SteppingMotor();
         ~SteppingMotor();
-        int Init();
-        int Run(float angle);
-        void Stop();
+        int init();
+        int run(float angle);
+        void stop();
+		int getStatus(char* status);
     protected:
         int channel;
     private:
         
-        void OutputSPI(unsigned char *data, int length);
+        void outputSPI(unsigned char *data, int length);
 };
