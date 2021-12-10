@@ -1,5 +1,5 @@
-#include "include/BackMotor.hpp"
-#include "include/FrontMotor.hpp"
+//#include "include/BackMotor.hpp"
+//#include "include/FrontMotor.hpp"
 //#include "include/Device.hpp"
 //#include "include/Laser.hpp"
 #include <math.h>
@@ -45,14 +45,11 @@ int main(){
     backMotor.Init();
     FrontMotor& frontMotor=FrontMotor::getInstance();
     frontMotor.Init();
-    backMotor.Stop();
-    frontMotor.Stop();
 
-    while(1){
-   backMotor.Run(100);
-  frontMotor.Run(100);
+    frontMotor.Run(180);
     delay(1000);
-    }
+    frontMotor.Run(-180);
+    delay(1000);
     
 
     //Device* laser=new Laser;
