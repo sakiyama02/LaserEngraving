@@ -1,4 +1,4 @@
-#include "./EngravingControl.hpp"
+#include "../include/EngravingControl.hpp"
 //コンストラクタ
 EngravingControl::EngravingControl(){}
 //デストラクタ
@@ -91,7 +91,7 @@ int EngravingControl::NomalMove(){
     }
     //アーム制御インスタンス取得
     //ArmMotor &armmotor=ArmMotor::getInstance();
-    //printf("%d,%d\n",coordinateindex->x,coordinateindex->y);
+
     //アームに座標引き渡し
     //armmotor.Run(coordinateindex->x,coordinateindex->y);
     //次の座標リストへ
@@ -107,4 +107,5 @@ int EngravingControl::Stop(){
     //アーム停止
     //armmotor.Stop();
     statemanage.StateGetter(&movementstate);
+    return SYS_OK;
 }

@@ -1,4 +1,4 @@
-#include "./ImageInput.hpp"
+#include "../include/ImageInput.hpp"
 //コンストラクタ
 InputImage::InputImage(){}
 //デストラクタ
@@ -46,12 +46,7 @@ int InputImage::ImageContour(IplImage* _inputimage){
     CvSeq *firstcontours = NULL;
     CvMemStorage *storage = cvCreateMemStorage (0);
     //輪郭データ取得
-    try{
-	cvThreshold (_inputimage, _inputimage, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-    }catch(cv::Exception& e){
-        printf("cvThreshold:opencv上でエラーが発生");
-        return -1;
-    }
+    cvThreshold (_inputimage, _inputimage, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
     int allcontourcnt = cvFindContours(_inputimage,storage,&firstcontours,sizeof (CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE);
 
     if (firstcontours != NULL){
@@ -84,4 +79,7 @@ int InputImage::NextContour(CvSeq *Contour,int Contourcnt)
 
 }
 
-
+int InputImage::ContourGetter(std::map<int,std::list<CONTOURData>>* _CONTOURData){
+    _CONTOURData->insert(mp.begin(),mp.end());
+    return SYS_OK;
+}

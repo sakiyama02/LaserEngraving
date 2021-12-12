@@ -1,5 +1,5 @@
-#include "./LaserEngraving.hpp"
-#include "./EngravingControl.hpp"
+#include "../include/LaserEngraving.hpp"
+#include "../include/EngravingControl.hpp"
 //コンストラクタ
 LaserEngraving::LaserEngraving(){}
 //デストラクタ
@@ -21,6 +21,8 @@ int LaserEngraving::Run(char* _filepath){
     inputimage.Input(_filepath,&inputfile);
     inputimage.ImageSizeChange(inputfile,&outputfile);
     inputimage.ImageContour(outputfile);
+    cvReleaseImage(&inputfile);
+    cvReleaseImage(&outputfile);
     //輪郭の頂点座標取得
     inputimage.ContourGetter(&contour);
     //彫刻制御のRun

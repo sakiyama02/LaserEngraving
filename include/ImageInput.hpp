@@ -6,11 +6,9 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include "System.hpp"
 using namespace std;
-typedef struct CONTOUR_TAG {	
-	int x;
-    int y;
-}CONTOURData;
+
 
 //サイズ変更を行いたい数値に変更できる
 #define BASICWIDTH 100
@@ -30,7 +28,7 @@ class InputImage
         //画像の輪郭抽出
         //IpImege型の画像を送信することで変換した値を返す
         int ImageContour(IplImage*);
-        
+        int ContourGetter(std::map<int,std::list<CONTOURData>>*);
     private:
         std::map<int,std::list<CONTOURData>> mp;
         //輪郭最外層の頂点取得
