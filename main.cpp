@@ -1,5 +1,6 @@
 #include "include/BackMotor.hpp"
 #include "include/FrontMotor.hpp"
+#include "include/LaserEngraving.hpp"
 //#include "include/Device.hpp"
 //#include "include/Laser.hpp"
 #include <math.h>
@@ -40,7 +41,11 @@ th arm_th(length L,pos P){
 
 
 int main(){
-    
+    LaserEngraving laserengraving;
+    char* filepath="./11669.png";
+    laserengraving.Run(filepath);
+    return 0;
+    /*
     BackMotor& backMotor=BackMotor::getInstance();
     backMotor.Init();
     FrontMotor& frontMotor=FrontMotor::getInstance();
@@ -53,7 +58,7 @@ int main(){
   frontMotor.Run(100);
     delay(1000);
     }
-    
+    */
 
     //Device* laser=new Laser;
     //laser->Run(30);

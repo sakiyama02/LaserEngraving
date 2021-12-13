@@ -1,4 +1,6 @@
 #include "../include/EngravingControl.hpp"
+#include "../include/ArmControl.hpp"
+#include "../include/Laser.hpp"
 //コンストラクタ
 EngravingControl::EngravingControl(){}
 //デストラクタ
@@ -55,9 +57,11 @@ int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
 int EngravingControl::InitMove(){
     int state=0;
     //アーム制御インスタンス取得
-    //ArmMotor &armmotor=ArmMotor::getInstance();
+    ArmControl &armcontrol=ArmControl::getInstance();
+    Laser laser;
+    laser.init();
     //アーム制御初期化呼び出し
-    //armmotor.init();
+    armcontrol.init();
     state=statemanage.StateGetter(&movementstate);
     if(state==NOMAL_MODE){
         return SYS_OK;
@@ -69,7 +73,8 @@ int EngravingControl::InitMove(){
 
 //正常動作
 int EngravingControl::NomalMove(){
-    //Laser laser;
+    Laser laser;
+    int duty=1;
     //現在の輪郭の頂点リストを取得し終わったか確認
     if(coordinateindex==coordinatedata.end()){
         //次の輪郭へ移行
@@ -85,27 +90,27 @@ int EngravingControl::NomalMove(){
         coordinateindex=coordinatedata.begin();
     }
     if(coordinateindex==coordinatedata.begin()){
-        //laser.Stop();
+        laser.stop();
     }else{
-        //laser.Run();
+        laser.run(duty);
     }
     //アーム制御インスタンス取得
-    //ArmMotor &armmotor=ArmMotor::getInstance();
+    ArmControl &armcontrol=ArmControl::getInstance();
 
     //アームに座標引き渡し
-    //armmotor.Run(coordinateindex->x,coordinateindex->y);
+    armcontrol.run((double)coordinateindex->x,(double)coordinateindex->y);
     //次の座標リストへ
     coordinateindex++;
 }
 
 //停止
 int EngravingControl::Stop(){
-    //ArmMotor &armmotor=ArmMotor::getInstance();
-    //Laser laser;
+    ArmControl &armcontrol=ArmControl::getInstance();
+    Laser laser;
     //レーザー停止
-    //laser.Stop();
+    laser.stop();
     //アーム停止
-    //armmotor.Stop();
+    armcontrol.stop();
     statemanage.StateGetter(&movementstate);
     return SYS_OK;
 }
