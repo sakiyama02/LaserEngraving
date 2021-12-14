@@ -10,8 +10,11 @@
 class Laser : public Device{
 	public:
 
-	Laser();
-	~Laser();
+	static Laser& getInstance(){
+        static Laser instance;
+        return instance;
+    }
+
 
 	int run(int arg);
 	int stop(void);
@@ -19,4 +22,6 @@ class Laser : public Device{
 
 	protected:
 	private:
+	Laser();
+	~Laser();
 };

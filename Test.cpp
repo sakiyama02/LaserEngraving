@@ -46,7 +46,7 @@ class test{
 		pullUpDnControl(SW_PORT13,PUD_DOWN);
 
 		wiringPiISR(SW_PORT5,INT_EDGE_BOTH,&interrupt5);
-		wiringPiISR(SW_PORT6,INT_EDGE_RISING,&interrupt6);
+		wiringPiISR(SW_PORT6,INT_EDGE_RISINGｈ,&interrupt6);
 		wiringPiISR(SW_PORT13,INT_EDGE_RISING,&interrupt13);
 	}
 	~test(){}
