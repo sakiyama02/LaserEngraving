@@ -1,12 +1,11 @@
 
 #include "../include/Laser.hpp"
 #include "../include/Device.hpp"
-
 Laser::Laser(){}
 Laser::~Laser(){}
 
-int Laser::Init(){
-    /*
+int Laser::init(){
+    
     if (wiringPiSetupGpio() == -1) {
         return 1;
     }
@@ -14,19 +13,19 @@ int Laser::Init(){
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(375);
     pwmSetRange(1024);
-    */
+    
     return 0;
 }
 
-int Laser::Run(int duty){
+int Laser::run(int duty){
 
-    //pwmWrite(18, 10.24*duty);
+    pwmWrite(18, 10.24*duty);
     printf("duty=%d\n",duty);
     return 0;
 }
 
-int Laser::Stop(){
+int Laser::stop(){
 
-    //pwmWrite(18, 10.24*0);
+    pwmWrite(18, 10.24*0);
     return 0;
 }
