@@ -5,7 +5,7 @@
 #include <string>
 #define SYS_OK 0    //正常終了
 #define SYS_NG 1    //異常終了
-#define SYS_PARAM 2 //引数エラー
+#define SYS_PARAM 2 //引数エラ
 // integer 8bit
 using int8 = int8_t;
 

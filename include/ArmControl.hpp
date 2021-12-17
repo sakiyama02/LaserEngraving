@@ -7,6 +7,12 @@ typedef struct TH{
 	double th1;
 }TH;
 
+typedef struct DEG{
+	double deg0;
+	double deg1;
+}DEG;
+
+
 typedef struct LENGTH{
 	double l0;
 	double l1;
@@ -33,7 +39,7 @@ class ArmControl {
 	private:
 	ArmControl();
 	~ArmControl();
-
+	DEG deg;
 	POS arm_pos;
 	TH th;
 	LENGTH length;

@@ -20,7 +20,7 @@ int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
         //準備状態
         case PREPARATION_MODE:
             //待機状態
-             statemanage.StateSetter(NOMAL_MODE);           
+             statemanage.StateSetter(INIT_MODE);           
             break;
         //初期化状態
         case INIT_MODE:
@@ -58,10 +58,11 @@ int EngravingControl::InitMove(){
     int state=0;
     //アーム制御インスタンス取得
     ArmControl &armcontrol=ArmControl::getInstance();
-    Laser laser;
+    Laser &laser=Laser::getInstance();
     laser.init();
     //アーム制御初期化呼び出し
     armcontrol.init();
+    statemanage.StateSetter(NOMAL_MODE);     
     state=statemanage.StateGetter(&movementstate);
     if(state==NOMAL_MODE){
         return SYS_OK;
@@ -73,7 +74,7 @@ int EngravingControl::InitMove(){
 
 //正常動作
 int EngravingControl::NomalMove(){
-    Laser laser;
+    Laser &laser=Laser::getInstance();
     int duty=1;
     //現在の輪郭の頂点リストを取得し終わったか確認
     if(coordinateindex==coordinatedata.end()){
@@ -106,7 +107,7 @@ int EngravingControl::NomalMove(){
 //停止
 int EngravingControl::Stop(){
     ArmControl &armcontrol=ArmControl::getInstance();
-    Laser laser;
+    Laser &laser=Laser::getInstance();
     //レーザー停止
     laser.stop();
     //アーム停止

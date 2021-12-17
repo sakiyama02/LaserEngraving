@@ -6,6 +6,8 @@
 ArmControl::ArmControl(){
 	length.l0=100;
 	length.l1=100;
+	deg.deg0=0;
+	deg.deg1=0;
 	BackMotor &bMotor  = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
 	bMotor.init();
@@ -14,6 +16,10 @@ ArmControl::ArmControl(){
 
 ArmControl::~ArmControl(){}
 int ArmControl::stop(){
+	BackMotor &bMotor  = BackMotor::getInstance();
+	FrontMotor &fMotor = FrontMotor::getInstance();
+	bMotor.stop();
+	fMotor.stop();
 	return 1;
 }
 int ArmControl::init(){
@@ -30,21 +36,30 @@ int ArmControl::run(double x,double y){
 	// ラジアンから角度に変換
 	double degree0 = t.th0 * 180.0 / PI;
 	double degree1 = t.th1 * 180.0 / PI;
+	
+	printf("%f,%f\n",degree0,degree1);
 
 	// 指定した角度に回転させる
-	bMotor.run(degree0);
-	fMotor.run(degree1);
-
+	printf("Back=");
+	bMotor.run(degree0-deg.deg0);
+	printf("Front=");
+	fMotor.run(degree1-deg.deg1);
+	//printf("_%f,_%f\n",degree0-deg.deg0,degree1-deg.deg1);
+	deg.deg0=degree0;
+	deg.deg1=degree1;
 	char bStatus[2];
 	char fStatus[2];
 
 	// 両方のモータが止まるまで待つ
+
 	do{
 		bMotor.getStatus(bStatus);
 		fMotor.getStatus(fStatus);
-		delay(50);
+		delay(100);
+		printf("bSta=%x,fSta=%x",(bStatus[1]),(fStatus[1]));
 	}while((bStatus[1]&0x60)||(fStatus[1]&0x60));
 	
+	//delay(15000);
 	printf("MotorStop\n");
 	return 1;
 }

@@ -11,8 +11,8 @@ using namespace std;
 
 
 //サイズ変更を行いたい数値に変更できる
-#define BASICWIDTH 100
-#define BASICHEIGHT 100
+#define BASICWIDTH 210
+#define BASICHEIGHT 140
 class InputImage
 {
     public:

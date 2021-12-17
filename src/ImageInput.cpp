@@ -65,9 +65,9 @@ int InputImage::NextContour(CvSeq *Contour,int Contourcnt)
 	//輪郭を構成する頂点座標を取得
 	for ( int index = 0; index < Contour->total;index++){
 	    CvPoint *point = CV_GET_SEQ_ELEM (CvPoint, Contour,index);
-	    structdata.x=point->x;
-	    structdata.y=point->y;
-	    printf("%d,%d\n",point->x,point->y);
+	    structdata.x=point->x-50;
+	    structdata.y=point->y+25;
+	    printf("%d,%d\n",point->x-50,point->y+25);
 	    listtemp.push_back(structdata);
 	}
 	mp[Contourcnt]=listtemp;

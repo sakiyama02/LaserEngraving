@@ -38,12 +38,43 @@ th arm_th(length L,pos P){
 	return T;
 }
 */
-
+#include "include/ArmControl.hpp"
 
 int main(){
     LaserEngraving laserengraving;
-    char* filepath="./11669.png";
-    laserengraving.Run(filepath);
+    char* filepath="./test.png";
+    //laserengraving.Run(filepath);
+    ArmControl &armcontrol=ArmControl::getInstance();
+    double inputX,inputY;
+    cout << "X=";
+    cin >> inputX;
+    cout << "Y=";
+    cin >> inputY;
+    //アームに座標引き渡し
+    armcontrol.run(inputX,inputY);
+    delay(10000);
+    
+    for(int i=0; i<= 70;i+=5){
+	armcontrol.run(inputX,inputY+i);
+	delay(1000);
+    }
+    
+    for(int i=0; i<= 70;i+=5){
+	armcontrol.run(inputX-i,inputY+70);
+	delay(1000);
+    }
+    
+    for(int i=0; i <= 70;i+=5){
+	armcontrol.run(inputX-70,inputY+70-i);
+	delay(1000);
+    }
+    
+    for(int i=70; i >= 0;i-=5){
+	armcontrol.run(inputX-i,inputY);
+	delay(1000);
+    }
+   
+    
     return 0;
     /*
     BackMotor& backMotor=BackMotor::getInstance();

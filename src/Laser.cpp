@@ -1,7 +1,6 @@
 
 #include "../include/Laser.hpp"
 #include "../include/Device.hpp"
-
 Laser::Laser(){}
 Laser::~Laser(){}
 
