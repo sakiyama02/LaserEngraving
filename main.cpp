@@ -43,7 +43,7 @@ th arm_th(length L,pos P){
 int main(){
     LaserEngraving laserengraving;
     char* filepath="./test.png";
-    //laserengraving.Run(filepath);
+    laserengraving.Run(filepath);
     ArmControl &armcontrol=ArmControl::getInstance();
     double inputX,inputY;
     cout << "X=";
