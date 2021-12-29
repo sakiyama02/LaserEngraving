@@ -42,7 +42,7 @@ th arm_th(length L,pos P){
 
 int main(){
     LaserEngraving laserengraving;
-    char* filepath="./test.png";
+    char* filepath="/media/pi/753A-343A/test.jpg";
     laserengraving.Run(filepath);
     ArmControl &armcontrol=ArmControl::getInstance();
     double inputX,inputY;
