@@ -1,13 +1,38 @@
 #include "../include/LaserEngraving.hpp"
 #include "../include/EngravingControl.hpp"
 //コンストラクタ
-LaserEngraving::LaserEngraving(){}
+LaserEngraving::LaserEngraving(){
+    if(wiringPiSetupGpio() < 0) return 1;
+	pinMode(SW_PORT4,INPUT);
+	pinMode(SW_PORT5,INPUT);
+	pinMode(SW_PORT6,INPUT);
+	pinMode(SW_PORT13,INPUT);
+    pinMode(SW_PORT18, PWM_OUTPUT);
+	pinMode(SW_PORT19,INPUT);
+
+	pullUpDnControl(SW_PORT4,PUD_DOWN);
+	pullUpDnControl(SW_PORT5,PUD_DOWN);
+	pullUpDnControl(SW_PORT6,PUD_DOWN);
+	pullUpDnControl(SW_PORT13,PUD_DOWN);
+	pullUpDnControl(SW_PORT19,PUD_DOWN);
+
+	wiringPiISR(SW_PORT4,INT_EDGE_RISING,interrupt4);
+	wiringPiISR(SW_PORT5,INT_EDGE_RISING,interrupt5);
+	wiringPiISR(SW_PORT6,INT_EDGE_RISING,interrupt6);
+	wiringPiISR(SW_PORT13,INT_EDGE_RISING,interrupt13);
+	wiringPiISR(SW_PORT19,INT_EDGE_RISING,interrupt19);
+
+    pwmSetMode(PWM_MODE_MS);
+    pwmSetClock(375);
+    pwmSetRange(1024);
+    pwmWrite(SW_PORT18, 10.24*70);
+}
 //デストラクタ
 LaserEngraving::~LaserEngraving(){}
 //実行
 int LaserEngraving::Run(char* _filepath){
     //輪郭取得クラス宣言
-    InputImage inputimage;
+    Inpu@tImage inputimage;
     //彫刻制御クラス宣言
     EngravingControl engravingcontrol;
     //入力画像IpImage型宣言

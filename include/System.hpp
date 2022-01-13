@@ -3,9 +3,16 @@
 #include <string.h>
 #include <memory>
 #include <string>
+#include "../include/StateManage.hpp"
 #define SYS_OK 0    //正常終了
 #define SYS_NG 1    //異常終了
 #define SYS_PARAM 2 //引数エラ
+#define SW_PORT4 4
+#define SW_PORT5 5
+#define SW_PORT6 6
+#define SW_PORT13 13
+#define SW_PORT18 18
+#define SW_PORT19 19
 // integer 8bit
 using int8 = int8_t;
 
@@ -50,19 +57,33 @@ enum WorkerState
     EMERGENCY_LEFTDOWN,
     EMERGENCY_RIGHTUP,
     EMERGENCY_RIGHTDOWN,
-    //ドア緊急停止スイッチ
-    EMERGENCY_DOOR,
     //緊急ボタン
     EMERGENCY_SWITCH,
 };
 
-enum PreparationState{
-    //加工物設置スイッチ
-    WORKPIECE_SWITCH,
-    //準備ドア
-    CLOSE_DOOR,
-};
 typedef struct CONTOUR_TAG {	
 	int x;
     int y;
 }CONTOURData;
+
+StateManage &statemanage=StateManage::getInstance();
+void EmergencyInterrupt(){
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_SWITCH);
+}
+void LeftUpInterrupt(){
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_LEFTUP);
+}
+void LeftDownInterrupt(){
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_LEFTDOWN);
+}
+void RightUpInterrupt(){
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_RIGHTUP);
+}
+void RightDownInterrupt(){
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_RIGHTDOWN);
+}

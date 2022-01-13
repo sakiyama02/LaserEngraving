@@ -38,8 +38,6 @@ int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
         case EMERGENCY_LEFTDOWN:
         case EMERGENCY_RIGHTUP:
         case EMERGENCY_RIGHTDOWN:
-        //ドア緊急停止スイッチ
-        case EMERGENCY_DOOR:
         //緊急ボタン
         case EMERGENCY_SWITCH:
             statemanage.StateSetter(END_MODE);
