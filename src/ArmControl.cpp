@@ -36,8 +36,8 @@ int ArmControl::run(double x,double y){
 	// ラジアンから角度に変換
 	double degree0 = t.th0 * 180.0 / PI;
 	double degree1 = t.th1 * 180.0 / PI;
-	char bStatus[2]={0,0};
-	char fStatus[2]={0,0};
+	unsigned char bStatus[2]={0,0};
+	unsigned char fStatus[2]={0,0};
 	
 	printf("%f,%f\n",degree0,degree1);
 
@@ -55,11 +55,13 @@ int ArmControl::run(double x,double y){
 
 	do{
 		bMotor.getStatus(bStatus);
+		printf("bMotor:");
 		fMotor.getStatus(fStatus);
+		printf("fMotor:");
 		
-		//printf("bSta=%x,fSta=%x",(bStatus[0]),(bStatus[1]));
+		//printf("bSta=%x,bSta=%x",(bStatus[0]),(bStatus[1]));
 		delay(100);
-	}while((bStatus[1]&0x60)||(fStatus[1]&0x60));
+	}while((bStatus[1]&0x20)||(fStatus[1]&0x20));
 	
 	//delay(15000);
 	printf("MotorStop\n");

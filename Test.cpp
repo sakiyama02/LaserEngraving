@@ -29,7 +29,7 @@ void interrupt19(){
 }
 
 int main(){
-	/*
+	
 	if(wiringPiSetupGpio() < 0) return 1;
 	pinMode(SW_PORT4,INPUT);
 	pinMode(SW_PORT5,INPUT);
@@ -56,7 +56,8 @@ int main(){
    	//	 }
 		delay(100);
 	}
-	*/
+	
+	/*
     if (wiringPiSetupGpio() == -1) {
 	return 1;
     }
@@ -71,6 +72,6 @@ int main(){
     delay(5000);
 }
     pwmWrite(18, 10.24*0);
-    
+    */
 	return 0;
 }

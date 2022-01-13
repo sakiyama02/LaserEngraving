@@ -20,7 +20,7 @@ class SteppingMotor {
         int init();
         int run(float angle);
         void stop();
-		int getStatus(char* status);
+		int getStatus(unsigned char* status);
     protected:
         int channel;
     private:

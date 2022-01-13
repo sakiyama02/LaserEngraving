@@ -1,13 +1,39 @@
 #include "../include/LaserEngraving.hpp"
 #include "../include/EngravingControl.hpp"
+void EmergencyInterrupt(){
+    StateManage &statemanage=StateManage::getInstance();
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_SWITCH);
+}
+void LeftUpInterrupt(){
+    StateManage &statemanage=StateManage::getInstance();
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_LEFTUP);
+}
+void LeftDownInterrupt(){
+    StateManage &statemanage=StateManage::getInstance();
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_LEFTDOWN);
+}
+void RightUpInterrupt(){
+    StateManage &statemanage=StateManage::getInstance();
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_RIGHTUP);
+}
+void RightDownInterrupt(){
+    StateManage &statemanage=StateManage::getInstance();
+    delay(20);
+    statemanage.StateSetter(EMERGENCY_RIGHTDOWN);
+}
+
 //コンストラクタ
 LaserEngraving::LaserEngraving(){
-    if(wiringPiSetupGpio() < 0) return 1;
+    if(wiringPiSetupGpio() < 0) 
 	pinMode(SW_PORT4,INPUT);
 	pinMode(SW_PORT5,INPUT);
 	pinMode(SW_PORT6,INPUT);
 	pinMode(SW_PORT13,INPUT);
-    pinMode(SW_PORT18, PWM_OUTPUT);
+	pinMode(SW_PORT18, PWM_OUTPUT);
 	pinMode(SW_PORT19,INPUT);
 
 	pullUpDnControl(SW_PORT4,PUD_DOWN);
@@ -16,11 +42,11 @@ LaserEngraving::LaserEngraving(){
 	pullUpDnControl(SW_PORT13,PUD_DOWN);
 	pullUpDnControl(SW_PORT19,PUD_DOWN);
 
-	wiringPiISR(SW_PORT4,INT_EDGE_RISING,interrupt4);
-	wiringPiISR(SW_PORT5,INT_EDGE_RISING,interrupt5);
-	wiringPiISR(SW_PORT6,INT_EDGE_RISING,interrupt6);
-	wiringPiISR(SW_PORT13,INT_EDGE_RISING,interrupt13);
-	wiringPiISR(SW_PORT19,INT_EDGE_RISING,interrupt19);
+	wiringPiISR(SW_PORT4,INT_EDGE_RISING,EmergencyInterrupt);
+	wiringPiISR(SW_PORT5,INT_EDGE_RISING,LeftUpInterrupt);
+	wiringPiISR(SW_PORT6,INT_EDGE_RISING,LeftDownInterrupt);
+	wiringPiISR(SW_PORT13,INT_EDGE_RISING,RightUpInterrupt);
+	wiringPiISR(SW_PORT19,INT_EDGE_RISING,RightDownInterrupt);
 
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(375);
@@ -32,7 +58,7 @@ LaserEngraving::~LaserEngraving(){}
 //実行
 int LaserEngraving::Run(char* _filepath){
     //輪郭取得クラス宣言
-    Inpu@tImage inputimage;
+    InputImage inputimage;
     //彫刻制御クラス宣言
     EngravingControl engravingcontrol;
     //入力画像IpImage型宣言

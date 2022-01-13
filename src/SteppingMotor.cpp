@@ -59,7 +59,7 @@ int SteppingMotor::init(){
     return 1;
 }
 
-int SteppingMotor::getStatus(char* status){
+int SteppingMotor::getStatus(unsigned char* status){
 	unsigned char data[]={0xd0,0x00,0x00};
 	outputSPI(data,sizeof(data));
     printf("data=%02x,data=%02x\n",data[1],data[2]);

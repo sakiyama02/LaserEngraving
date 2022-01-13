@@ -3,7 +3,7 @@
 #include <string.h>
 #include <memory>
 #include <string>
-#include "../include/StateManage.hpp"
+
 #define SYS_OK 0    //正常終了
 #define SYS_NG 1    //異常終了
 #define SYS_PARAM 2 //引数エラ
@@ -66,24 +66,4 @@ typedef struct CONTOUR_TAG {
     int y;
 }CONTOURData;
 
-StateManage &statemanage=StateManage::getInstance();
-void EmergencyInterrupt(){
-    delay(20);
-    statemanage.StateSetter(EMERGENCY_SWITCH);
-}
-void LeftUpInterrupt(){
-    delay(20);
-    statemanage.StateSetter(EMERGENCY_LEFTUP);
-}
-void LeftDownInterrupt(){
-    delay(20);
-    statemanage.StateSetter(EMERGENCY_LEFTDOWN);
-}
-void RightUpInterrupt(){
-    delay(20);
-    statemanage.StateSetter(EMERGENCY_RIGHTUP);
-}
-void RightDownInterrupt(){
-    delay(20);
-    statemanage.StateSetter(EMERGENCY_RIGHTDOWN);
-}
+

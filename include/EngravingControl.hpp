@@ -10,6 +10,8 @@
 #include "System.hpp"
 #include <iostream>
 #include <map>
+#include <wiringPi.h>
+#include <stdio.h>
 #include <list>
 class EngravingControl {
     public:
@@ -28,7 +30,7 @@ class EngravingControl {
     private:
         //状態管理インスタンス取得
         StateManage &statemanage=StateManage::getInstance();
-        int movementstate=WORKPIECE_SWITCH;
+        int movementstate=0;
         //すべての輪郭のリスト情報
         std::map<int,std::list<CONTOURData>> contourdata;
         //頂点のリスト情報
