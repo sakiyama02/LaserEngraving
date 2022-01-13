@@ -38,30 +38,31 @@ int ArmControl::run(double x,double y){
 	double degree1 = t.th1 * 180.0 / PI;
 	char bStatus[2]={0,0};
 	char fStatus[2]={0,0};
+	int step1=0;
+	int step2=0;
+	int max=0;
 	
 	printf("%f,%f\n",degree0,degree1);
 
-	// 指定した角度に回転させる
-	printf("Back");
-	bMotor.run(degree0-deg.deg0);
-	printf("Front");
-	fMotor.run(degree1-deg.deg1);
-	//printf("_%f,_%f\n",degree0-deg.deg0,degree1-deg.deg1);
 	deg.deg0=degree0;
 	deg.deg1=degree1;
-
+	// 角度からstep数を取得
+	step1 = (int)round((degree0-deg.deg0)/ONE_MICRO_STEP);
+	step2 = (int)round((degree1-deg.deg1)/ONE_MICRO_STEP);
+	// 最大値を取得
+	max=step1;
+	(max<step2)?max=step2:max;
+	// 一ステップずつ実行
+	for(int i=0;i<max;i++){
+		if(i<step1){
+			bMotor.run(1);
+		}
+		if(i<step2){
+			fMotor.run(1);
+		}
+		delay(5);
+	}
 	
-	// 両方のモータが止まるまで待つ
-
-	do{
-		bMotor.getStatus(bStatus);
-		fMotor.getStatus(fStatus);
-		
-		//printf("bSta=%x,fSta=%x",(bStatus[0]),(bStatus[1]));
-		delay(100);
-	}while((bStatus[1]&0x60)||(fStatus[1]&0x60));
-	
-	//delay(15000);
 	printf("MotorStop\n");
 	return 1;
 }

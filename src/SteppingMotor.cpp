@@ -27,6 +27,18 @@ int SteppingMotor::run(float angle){
     return 1;
 }
 
+int SteppingMotor::run(int step){
+	unsigned char data[4];
+
+    data[1]=((step>>16)&0xff);
+    data[2]=((step>>8)&0xff);
+    data[3]=((step)&0xff);
+
+	outputSPI(data,sizeof(data));
+
+	return 1;
+}
+
 int SteppingMotor::init(){
     
     if(wiringPiSPISetup(channel, CLOCK_SPEED) < 0) {
