@@ -16,24 +16,6 @@ int SteppingMotor::run(float angle){
     }
 
     step = (int)round(angle/ONE_MICRO_STEP);
-    //pri#include "../include/SteppingMotor.hpp"
-
-SteppingMotor::SteppingMotor(){
-}
-SteppingMotor::~SteppingMotor(){}
-
-int SteppingMotor::run(float angle){
-    unsigned char data[4];
-    int step=0;
-
-    if(angle<0){
-        angle=-angle;
-        data[0]=0x40;
-    }else{
-        data[0]=0x41;
-    }
-
-    step = (int)round(angle/ONE_MICRO_STEP);
     printf("step=%d\n",step);
 
     data[1]=((step>>16)&0xff);
