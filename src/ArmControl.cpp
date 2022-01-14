@@ -2,6 +2,7 @@
 #include "../include/FrontMotor.hpp"
 #include "../include/BackMotor.hpp"
 #include <math.h>
+#include <algorithm>
 
 ArmControl::ArmControl(){
 	length.l0=100;
@@ -40,7 +41,7 @@ int ArmControl::run(double x,double y){
 	char fStatus[2]={0,0};
 	int step1=0;
 	int step2=0;
-	int max=0;
+	int stepMax=0;
 	
 	printf("%f,%f\n",degree0,degree1);
 
@@ -50,10 +51,9 @@ int ArmControl::run(double x,double y){
 	step1 = (int)round((degree0-deg.deg0)/ONE_MICRO_STEP);
 	step2 = (int)round((degree1-deg.deg1)/ONE_MICRO_STEP);
 	// 最大値を取得
-	max=step1;
-	(max<step2)?max=step2:max;
+	stepMax=max(step1,step2);
 	// 一ステップずつ実行
-	for(int i=0;i<max;i++){
+	for(int i=0;i<stepMax;i++){
 		if(i<step1){
 			bMotor.run(1);
 		}
