@@ -51,15 +51,35 @@ int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
 
 //初期化動作
 int EngravingControl::InitMove(){
-    int state=0;
+    int movementstate=0;
     //アーム制御インスタンス取得
     ArmControl &armcontrol=ArmControl::getInstance();
     Laser &laser=Laser::getInstance();
     laser.init();
-    //アーム制御初期化呼び出し
-    armcontrol.init();
-    return SYS_OK;
+    while(1){
+        //最新状態を取得
+        statemanage.StateGetter(&movementstate);
+        if(movementstate==INIT_ARM){
 
+            break;
+        }
+        //アーム制御初期化呼び出し
+        armcontrol.frontinit(0);
+    }
+    for(int index=0;index<12800;++index){
+        armcontrol.frontinit(1);
+    }
+    armcontrol.frontinit();
+    while(1){
+        //最新状態を取得
+        statemanage.StateGetter(&movementstate);
+        if(movementstate==NOMAL_MODE){
+            break;
+        }
+        //アーム制御初期化呼び出し
+        armcontrol.backinit();
+    }
+    return SYS_OK;
 }
 
 //正常動作

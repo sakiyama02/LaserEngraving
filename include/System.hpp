@@ -13,6 +13,7 @@
 #define SW_PORT13 13
 #define SW_PORT18 18
 #define SW_PORT19 19
+#define INIT_ARM -1
 // integer 8bit
 using int8 = int8_t;
 

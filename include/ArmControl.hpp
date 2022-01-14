@@ -28,7 +28,8 @@ class ArmControl {
 
 	int run(double x,double y);
 	int stop();
-	int init();
+	int frontinit(int);
+	int backinit();
 
 	static ArmControl& getInstance(){
 		static ArmControl instance;

@@ -5,8 +5,8 @@
 int statetable[TRIGGER_EVENT][MAIN_EVENT]={
     //準備状態      初期化状態       正常運転状態 
     {INIT_MODE,    END_MODE        ,END_MODE},//緊急停止
-    {END_MODE ,    INIT_MODE       ,END_MODE},//アーム(左上)
-    {END_MODE ,    NOMAL_MODE      ,END_MODE},//アーム(左下)
+    {END_MODE ,    NOMAL_MODE      ,END_MODE},//アーム(左上)
+    {END_MODE ,    INIT_ARM        ,END_MODE},//アーム(左下)
     {END_MODE ,    END_MODE        ,END_MODE},//アーム(右上)
     {END_MODE ,    END_MODE        ,END_MODE},//アーム(右下)
 };

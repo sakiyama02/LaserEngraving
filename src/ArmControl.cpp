@@ -22,7 +22,16 @@ int ArmControl::stop(){
 	fMotor.stop();
 	return 1;
 }
-int ArmControl::init(){
+int ArmControl::backinit(int dir){
+	BackMotor &bMotor  = BackMotor::getInstance();
+	bMotor.run(1,dir);
+	delay(2);
+	return 1;
+}
+int ArmControl::frontinit(){
+	FrontMotor &fMotor  = BackMotor::getInstance();
+	fMotor.run(1,dir);
+	delay(2);
 	return 1;
 }
 int ArmControl::run(double x,double y){
@@ -36,35 +45,42 @@ int ArmControl::run(double x,double y){
 	// ラジアンから角度に変換
 	double degree0 = t.th0 * 180.0 / PI;
 	double degree1 = t.th1 * 180.0 / PI;
-	unsigned char bStatus[2]={0,0};
-	unsigned char fStatus[2]={0,0};
+	//char bStatus[2]={0,0};
+	//char fStatus[2]={0,0};
+	int step1=0;
+	int step2=0;
+	int dir1=0;
+	int dir2=0;
+	int max=0;
 	
-	//printf("%f,%f\n",degree0,degree1);
+	printf("%f,%f\n",degree0,degree1);
 
-	// 指定した角度に回転させる
-	//printf("Back");
-	bMotor.run(degree0-deg.deg0);
-	//printf("Front");
-	fMotor.run(degree1-deg.deg1);
-	//printf("_%f,_%f\n",degree0-deg.deg0,degree1-deg.deg1);
+
+	// 角度からstep数を取得
+	step1 = (int)round((degree0-deg.deg0)/ONE_MICRO_STEP);
+	step2 = (int)round((degree1-deg.deg1)/ONE_MICRO_STEP);
+	printf("%d,%d\n",step1,step2);
+	(degree0-deg.deg0>0)?dir1=1:dir1=0;
+	(degree1-deg.deg1>0)?dir2=1:dir2=0;
+	(step1<0)?step1=-step1:step1;
+	(step2<0)?step2=-step2:step2;
 	deg.deg0=degree0;
 	deg.deg1=degree1;
-
+	// 最大値を取得
+	max=step1;
+	(max<step2)?max=step2:max;
+	// 一ステップずつ実行
+	for(int i=0;i<max;i++){
+		if(i<step1){
+			bMotor.run(1,dir1);
+		}
+		if(i<step2){
+			fMotor.run(1,dir2);
+		}
+		delay(2);
+	}
 	
-	// 両方のモータが止まるまで待つ
-
-	do{
-		bMotor.getStatus(bStatus);
-		//printf("bMotor:");
-		fMotor.getStatus(fStatus);
-		//printf("fMotor:");
-		
-		//printf("bSta=%x,bSta=%x",(bStatus[0]),(bStatus[1]));
-		delay(100);
-	}while((bStatus[1]&0x20)||(fStatus[1]&0x20));
-	
-	//delay(15000);
-	//printf("MotorStop\n");
+	printf("MotorStop\n");
 	return 1;
 }
 
