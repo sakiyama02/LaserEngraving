@@ -19,7 +19,7 @@ class SteppingMotor {
         ~SteppingMotor();
         int init();
         int run(float angle);
-		int run(int step);
+		int run(int step,int dir);
         void stop();
 		int getStatus(char* status);
     protected:

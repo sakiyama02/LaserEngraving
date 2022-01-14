@@ -27,8 +27,15 @@ int SteppingMotor::run(float angle){
     return 1;
 }
 
-int SteppingMotor::run(int step){
+int SteppingMotor::run(int step,int dir){
 	unsigned char data[4];
+
+
+	if(dir==1){
+        data[0]=0x41;
+    }else{
+        data[0]=0x40;
+    }
 
     data[1]=((step>>16)&0xff);
     data[2]=((step>>8)&0xff);
