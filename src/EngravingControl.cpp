@@ -20,33 +20,31 @@ int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
         //準備状態
         case PREPARATION_MODE:
             //待機状態
-             statemanage.StateSetter(INIT_MODE);           
+            printf("PREPARATION_MODE");
             break;
         //初期化状態
         case INIT_MODE:
+            printf("INIT_MODE:START");
             //初期化動作
             InitMove();
+            printf("INIT_MODE:END");
             break;
         //通常動作状態
         case NOMAL_MODE:
+            printf("NOMAL_MODE:START");
             //通常動作
             NomalMove();
+            printf("NOMAL_MODE:END");
             break;
-        //緊急停止状態
-        //アーム上の緊急停止スイッチ*4
-        case EMERGENCY_LEFTUP:
-        case EMERGENCY_LEFTDOWN:
-        case EMERGENCY_RIGHTUP:
-        case EMERGENCY_RIGHTDOWN:
-        //緊急ボタン
-        case EMERGENCY_SWITCH:
-            statemanage.StateSetter(END_MODE);
-            break;
+        //終了動作状態
         case END_MODE:
+            printf("END_MODE:START");
             Stop();
+            printf("END_MODE:END");
             return SYS_OK;
             break;
-        default:break;
+        default:
+            break;
         }
     }
 }
@@ -60,14 +58,8 @@ int EngravingControl::InitMove(){
     laser.init();
     //アーム制御初期化呼び出し
     armcontrol.init();
-    statemanage.StateSetter(NOMAL_MODE);     
-    state=statemanage.StateGetter(&movementstate);
-    if(state==NOMAL_MODE){
-        return SYS_OK;
-    }else{
-        //異常終了しているためエラーコードを返す
-        return -1;
-    }
+    return SYS_OK;
+
 }
 
 //正常動作
@@ -110,6 +102,5 @@ int EngravingControl::Stop(){
     laser.stop();
     //アーム停止
     armcontrol.stop();
-    statemanage.StateGetter(&movementstate);
     return SYS_OK;
 }

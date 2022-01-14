@@ -52,15 +52,18 @@ enum WorkerState
     NOMAL_MODE,
     //終了状態
     END_MODE,
+
+};
+enum TriggerState
+{
+    //緊急ボタン
+    EMERGENCY_SWITCH,
     //アーム上の緊急停止スイッチ*4
     EMERGENCY_LEFTUP,
     EMERGENCY_LEFTDOWN,
     EMERGENCY_RIGHTUP,
     EMERGENCY_RIGHTDOWN,
-    //緊急ボタン
-    EMERGENCY_SWITCH,
 };
-
 typedef struct CONTOUR_TAG {	
 	int x;
     int y;

@@ -39,12 +39,12 @@ int ArmControl::run(double x,double y){
 	unsigned char bStatus[2]={0,0};
 	unsigned char fStatus[2]={0,0};
 	
-	printf("%f,%f\n",degree0,degree1);
+	//printf("%f,%f\n",degree0,degree1);
 
 	// 指定した角度に回転させる
-	printf("Back");
+	//printf("Back");
 	bMotor.run(degree0-deg.deg0);
-	printf("Front");
+	//printf("Front");
 	fMotor.run(degree1-deg.deg1);
 	//printf("_%f,_%f\n",degree0-deg.deg0,degree1-deg.deg1);
 	deg.deg0=degree0;
@@ -55,16 +55,16 @@ int ArmControl::run(double x,double y){
 
 	do{
 		bMotor.getStatus(bStatus);
-		printf("bMotor:");
+		//printf("bMotor:");
 		fMotor.getStatus(fStatus);
-		printf("fMotor:");
+		//printf("fMotor:");
 		
 		//printf("bSta=%x,bSta=%x",(bStatus[0]),(bStatus[1]));
 		delay(100);
 	}while((bStatus[1]&0x20)||(fStatus[1]&0x20));
 	
 	//delay(15000);
-	printf("MotorStop\n");
+	//printf("MotorStop\n");
 	return 1;
 }
 

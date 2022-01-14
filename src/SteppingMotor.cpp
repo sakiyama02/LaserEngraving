@@ -16,7 +16,7 @@ int SteppingMotor::run(float angle){
     }
 
     step = (int)round(angle/ONE_MICRO_STEP);
-    printf("step=%d\n",step);
+    //printf("step=%d\n",step);
 
     data[1]=((step>>16)&0xff);
     data[2]=((step>>8)&0xff);
@@ -62,7 +62,7 @@ int SteppingMotor::init(){
 int SteppingMotor::getStatus(unsigned char* status){
 	unsigned char data[]={0xd0,0x00,0x00};
 	outputSPI(data,sizeof(data));
-    printf("data=%02x,data=%02x\n",data[1],data[2]);
+    //printf("data=%02x,data=%02x\n",data[1],data[2]);
 	status[0]=data[1];
 	status[1]=data[2];
 	

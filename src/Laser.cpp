@@ -18,9 +18,8 @@ int Laser::init(){
 }
 
 int Laser::run(int duty){
-
     pwmWrite(18, 10.24*duty);
-    printf("duty=%d\n",duty);
+    //printf("duty=%d\n",duty);
     return 0;
 }
 

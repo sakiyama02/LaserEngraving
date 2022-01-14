@@ -13,3 +13,6 @@ int StateManage::StateSetter(int _inputstate){
     curentstate=_inputstate;
     return SYS_OK;
 }
+int StateManage::TriggerStateSetter(int _inputstate){
+    curentstate=statetable[_inputstate][curentstate];
+}
