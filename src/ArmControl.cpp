@@ -3,6 +3,7 @@
 #include "../include/BackMotor.hpp"
 #include <math.h>
 
+
 ArmControl::ArmControl(){
 	length.l0=100;
 	length.l1=100;
@@ -12,6 +13,8 @@ ArmControl::ArmControl(){
 	FrontMotor &fMotor = FrontMotor::getInstance();
 	bMotor.init();
 	fMotor.init();
+	
+    
 }
 
 ArmControl::~ArmControl(){}
@@ -20,23 +23,27 @@ int ArmControl::stop(){
 	FrontMotor &fMotor = FrontMotor::getInstance();
 	bMotor.stop();
 	fMotor.stop();
+	
 	return 1;
 }
-int ArmControl::backinit(int dir){
-	BackMotor &bMotor  = BackMotor::getInstance();
-	bMotor.run(1,dir);
-	delay(2);
-	return 1;
-}
-int ArmControl::frontinit(){
-	FrontMotor &fMotor  = BackMotor::getInstance();
+int ArmControl::frontinit(int dir){
+	FrontMotor &fMotor  = FrontMotor::getInstance();
 	fMotor.run(1,dir);
 	delay(2);
 	return 1;
 }
+int ArmControl::backinit(){
+	BackMotor &bMotor  = BackMotor::getInstance();
+	bMotor.run(1,0);
+	delay(2);
+	return 1;
+}
+
 int ArmControl::run(double x,double y){
 	BackMotor &bMotor  = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
+	
+
 	POS pos;
 	pos.x=x;
 	pos.y=y;
@@ -53,13 +60,15 @@ int ArmControl::run(double x,double y){
 	int dir2=0;
 	int max=0;
 	
-	printf("%f,%f\n",degree0,degree1);
+	//printf("%f,%f\n",degree0,degree1);
 
 
 	// 角度からstep数を取得
 	step1 = (int)round((degree0-deg.deg0)/ONE_MICRO_STEP);
 	step2 = (int)round((degree1-deg.deg1)/ONE_MICRO_STEP);
-	printf("%d,%d\n",step1,step2);
+	
+
+	//printf("%d    %d\n",step1,step2);
 	(degree0-deg.deg0>0)?dir1=1:dir1=0;
 	(degree1-deg.deg1>0)?dir2=1:dir2=0;
 	(step1<0)?step1=-step1:step1;
@@ -80,7 +89,7 @@ int ArmControl::run(double x,double y){
 		delay(2);
 	}
 	
-	printf("MotorStop\n");
+	//printf("MotorStop\n");
 	return 1;
 }
 
@@ -93,7 +102,7 @@ TH ArmControl::calc(POS pos){
 	double norm = sqrt((pos.x*pos.x)+(pos.y*pos.y));
 
 	TH T;
-	T.th0=atan2(y , x) + acos(((x * x) +(y * y)+(l0*l0)- (l1*l1)) / (2*l0*norm));
+	T.th0=atan2(y , x) - acos(((x * x) +(y * y)+(l0*l0)- (l1*l1)) / (2*l0*norm));
 	T.th1 = -T.th0 + atan2((y-l0*sin(T.th0)),(x-l0*cos(T.th0)));
 	
 	return T;

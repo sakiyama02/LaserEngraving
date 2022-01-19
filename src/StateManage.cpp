@@ -15,4 +15,6 @@ int StateManage::StateSetter(int _inputstate){
 }
 int StateManage::TriggerStateSetter(int _inputstate){
     curentstate=statetable[_inputstate][curentstate];
+    printf("State:%d\n",curentstate);
+    return SYS_OK;
 }

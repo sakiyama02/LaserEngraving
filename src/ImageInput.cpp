@@ -1,4 +1,8 @@
 #include "../include/ImageInput.hpp"
+#include <string>
+#include <fstream>
+std::ofstream writing_file;
+std::string filename = "sample.txt";
 //コンストラクタ
 InputImage::InputImage(){}
 //デストラクタ
@@ -34,6 +38,8 @@ int InputImage::ImageSizeChange(IplImage* _inputimage,IplImage** _outputimage){
         printf("cvCreateImage,cvResize:opencv上でエラーが発生");
         return -1;
     }
+    	cvShowImage("dst",*_outputimage);
+	cvWaitKey(0);
 
     return 0;
 }
@@ -47,7 +53,7 @@ int InputImage::ImageContour(IplImage* _inputimage){
     CvMemStorage *storage = cvCreateMemStorage (0);
     //輪郭データ取得
     cvThreshold (_inputimage, _inputimage, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-    int allcontourcnt = cvFindContours(_inputimage,storage,&firstcontours,sizeof (CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE);
+    int allcontourcnt = cvFindContours(_inputimage,storage,&firstcontours,sizeof (CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
 
     if (firstcontours != NULL){
 	//輪郭の描画
@@ -62,18 +68,24 @@ int InputImage::NextContour(CvSeq *Contour,int Contourcnt)
 {
     std::list<CONTOURData> listtemp;
     CONTOURData structdata;
+    writing_file.open(filename, std::ios::out);
 	//輪郭を構成する頂点座標を取得
 	for ( int index = 0; index < Contour->total;index++){
 	    CvPoint *point = CV_GET_SEQ_ELEM (CvPoint, Contour,index);
-	    structdata.x=point->x;
-	    structdata.y=point->y;
+	    structdata.x=point->x-100;
+	    structdata.y=point->y+70;
+	    printf("zahyou:x%d,y%d\n",structdata.x,structdata.y);
+	    std::string writing_text = std::to_string(structdata.x) + "    " + std::to_string(structdata.y);
+	    writing_file << writing_text << std::endl;
 	    listtemp.push_back(structdata);
 	}
 	mp[Contourcnt]=listtemp;
 	if (Contour->h_next != NULL){
+	    printf("rinkakukousin\n");
 	    //次の輪郭がある場合は次の輪郭を描画
 	    NextContour(Contour->h_next, Contourcnt+1);
 	}
+    writing_file.close();
     return 0;
 }
 

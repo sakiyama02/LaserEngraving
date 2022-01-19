@@ -2,7 +2,7 @@
 #include "include/FrontMotor.hpp"
 #include "include/LaserEngraving.hpp"
 //#include "include/Device.hpp"
-//#include "include/Laser.hpp"
+#include "include/Laser.hpp"
 #include <math.h>
 #include <iostream>
 using namespace std;
@@ -42,42 +42,50 @@ th arm_th(length L,pos P){
 
 int main(){
     LaserEngraving laserengraving;
-    char* filepath="./test.png";
+    char* filepath="tyuri.png";
     laserengraving.Run(filepath);
-    //ArmControl &armcontrol=ArmControl::getInstance();
-    /*double inputX,inputY;
-    cout << "X=";
-    cin >> inputX;
-    cout << "Y=";
-    cin >> inputY;
-    */
+    
+    /*
+    Laser &laser=Laser::getInstance();
+    ArmControl &armcontrol=ArmControl::getInstance();
+    laser.init();
+    delay(1000);
+    double inputX,inputY;
+    //cout << "X=";
+    //cin >> inputX;
+    //cout << "Y=";
+    //cin >> inputY;
+    inputX=80;
+    inputY=80;
     //アームに座標引き渡し
-    //armcontrol.run(inputX,inputY);
+    armcontrol.run(inputX,inputY);
+
    // delay(10000);
-    
-/*    for(int i=0; i<= 70;i+=5){
+   for(int i=0;i<3;i++){
+    laser.run(80);
+    for(double i=0; i<= 70;i+=0.5){
 	armcontrol.run(inputX,inputY+i);
-//	delay(1000);
+	//delay(1000);
     }
     
-    for(int i=0; i<= 70;i+=5){
+    for(double i=0; i<= 70;i+=0.5){
 	armcontrol.run(inputX-i,inputY+70);
-//	delay(1000);
+	//delay(1000);
     }
     
-    for(int i=0; i <= 70;i+=5){
+    for(double i=0; i<= 70;i+=0.5){
 	armcontrol.run(inputX-70,inputY+70-i);
-//	delay(1000);
+	//delay(1000);
     }
     
-    for(int i=70; i >= 0;i-=5){
+    for(double i=70; i >= 0;i-=0.5){
 	armcontrol.run(inputX-i,inputY);
-//	delay(1000);
+	//delay(1000);
     }
-   
-    
+   laser.stop();
+   delay(1000);
+}
     return 0;
-    * */
     /*
     BackMotor& backMotor=BackMotor::getInstance();
     backMotor.Init();
@@ -110,5 +118,5 @@ int main(){
 	*/
 
 
-    return 0;
+    //return 0;
 }

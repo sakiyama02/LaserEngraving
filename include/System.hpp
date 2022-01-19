@@ -13,7 +13,7 @@
 #define SW_PORT13 13
 #define SW_PORT18 18
 #define SW_PORT19 19
-#define INIT_ARM -1
+
 // integer 8bit
 using int8 = int8_t;
 
@@ -49,6 +49,7 @@ enum WorkerState
     PREPARATION_MODE,
     //初期化動作状態
     INIT_MODE,
+    INIT_ARM ,
     //正常運転状態
     NOMAL_MODE,
     //終了状態

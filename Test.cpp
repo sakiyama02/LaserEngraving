@@ -6,6 +6,7 @@
 #define SW_PORT13 13
 #define SW_PORT19 19
 
+/*
 void interrupt4(){
     delay(20);
     printf("4\n");
@@ -27,9 +28,9 @@ void interrupt19(){
     delay(20);
     printf("19\n");
 }
-
+*/
 int main(){
-	
+	/*
 	if(wiringPiSetupGpio() < 0) return 1;
 	pinMode(SW_PORT4,INPUT);
 	pinMode(SW_PORT5,INPUT);
@@ -56,8 +57,8 @@ int main(){
    	//	 }
 		delay(100);
 	}
+*/	
 	
-	/*
     if (wiringPiSetupGpio() == -1) {
 	return 1;
     }
@@ -67,11 +68,10 @@ int main(){
     pwmSetRange(1024);
     
     
-    pwmWrite(18, 10.24*70);
+    pwmWrite(18, 10.24*90);
     while(1){
     delay(5000);
 }
     pwmWrite(18, 10.24*0);
-    */
 	return 0;
 }
