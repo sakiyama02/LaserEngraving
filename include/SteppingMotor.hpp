@@ -22,6 +22,7 @@ class SteppingMotor {
 		int run(int step,int dir);
         void stop();
 		int getStatus(char* status);
+		int changeSpeed(char speed);
     protected:
         int channel;
     private:

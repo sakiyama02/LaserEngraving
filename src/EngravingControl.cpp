@@ -57,6 +57,7 @@ int EngravingControl::InitMove(){
     ArmControl &armcontrol=ArmControl::getInstance();
     Laser &laser=Laser::getInstance();
     laser.init();
+	armcontrol.changeSpeed(0xff);
     while(1){
         //最新状態を取得
         statemanage.StateGetter(&movementstate);

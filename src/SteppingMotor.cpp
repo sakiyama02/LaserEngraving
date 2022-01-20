@@ -30,7 +30,6 @@ int SteppingMotor::run(float angle){
 int SteppingMotor::run(int step,int dir){
 	unsigned char data[4];
 
-
 	if(dir==1){
         data[0]=0x41;
     }else{
@@ -46,6 +45,14 @@ int SteppingMotor::run(int step,int dir){
 	return 1;
 }
 
+int SteppingMotor::changeSpeed(char speed){
+	
+	// 最大速度
+    unsigned char data3[]={0x07,0x00,speed};
+
+	return 0;
+}
+
 int SteppingMotor::init(){
     
     if(wiringPiSPISetup(channel, CLOCK_SPEED) < 0) {
@@ -53,17 +60,28 @@ int SteppingMotor::init(){
         return -1;
     }
     
+	// レジスタ初期化
     unsigned char data0[]={0x00,0x00,0x00,0xc0};
+	// 加速度
     unsigned char data1[]={0x05,0x00,0x8A};
+	// 減速度
     unsigned char data2[]={0x06,0x00,0x8A};
+	// 最大速度
     unsigned char data3[]={0x07,0x00,0x01};
-    unsigned char data4[]={0x08,0x00,0x00};
-    unsigned char data5[]={0x15,0x00,0x01};
-    unsigned char data6[]={0x09,0xFF};
-    unsigned char data7[]={0x0A,0xFF};
-    unsigned char data8[]={0x0B,0xFF};
-    unsigned char data9[]={0x0C,0xFF};
-    unsigned char data10[]={0x16,0x07};
+    // 最小速度
+	unsigned char data4[]={0x08,0x00,0x00};
+    // フルステップ速度
+	unsigned char data5[]={0x15,0x00,0x01};
+    // ホールディングKval
+	unsigned char data6[]={0x09,0xFF};
+    
+	unsigned char data7[]={0x0A,0xFF};
+    
+	unsigned char data8[]={0x0B,0xFF};
+    
+	unsigned char data9[]={0x0C,0xFF};
+    
+	unsigned char data10[]={0x16,0x07};
     
     outputSPI(data1, sizeof(data0));
     delay(10);

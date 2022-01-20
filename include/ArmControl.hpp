@@ -30,6 +30,7 @@ class ArmControl {
 	int stop();
 	int frontinit(int);
 	int backinit();
+	int changeSpeed(char speed);
 
 	static ArmControl& getInstance(){
 		static ArmControl instance;
