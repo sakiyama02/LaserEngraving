@@ -14,6 +14,7 @@ ArmControl::ArmControl(){
 	bMotor.init();
 	fMotor.init();
 	
+    
 }
 
 ArmControl::~ArmControl(){}
@@ -25,26 +26,15 @@ int ArmControl::stop(){
 	
 	return 1;
 }
-
-int ArmControl::changeSpeed(char speed){
-	FrontMotor &fMotor  = FrontMotor::getInstance();
-	BackMotor &bMotor  = BackMotor::getInstance();
-
-	fMotor.changeSpeed(speed);
-	bMotor.changeSpeed(speed);
-
-	return 0;
-}
-
 int ArmControl::frontinit(int dir){
 	FrontMotor &fMotor  = FrontMotor::getInstance();
 	fMotor.run(1,dir);
 	delay(2);
 	return 1;
 }
-int ArmControl::backinit(int dir){
+int ArmControl::backinit(){
 	BackMotor &bMotor  = BackMotor::getInstance();
-	bMotor.run(1,dir);
+	bMotor.run(1,0);
 	delay(2);
 	return 1;
 }
@@ -53,6 +43,7 @@ int ArmControl::run(double x,double y){
 	BackMotor &bMotor  = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
 	
+
 	POS pos;
 	pos.x=x;
 	pos.y=y;

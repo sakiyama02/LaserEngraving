@@ -7,8 +7,6 @@
 #include <map>
 #include <list>
 #include "System.hpp"
-#include "opencv2/imgcodecs.hpp"
-using namespace cv;
 using namespace std;
 
 
@@ -34,6 +32,6 @@ class InputImage
     private:
         std::map<int,std::list<CONTOURData>> mp;
         //輪郭最外層の頂点取得
-        int NextContour(CvSeq *Contour,int Contourcnt,IplImage*);
+        int NextContour(CvSeq *Contour,int Contourcnt);
 
 };

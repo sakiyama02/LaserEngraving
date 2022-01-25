@@ -54,10 +54,9 @@ int EngravingControl::InitMove(){
     printf("initMove run\n");
     int movementstate=0;
     //アーム制御インスタンス取得
-    ArmControl &armcontrol = ArmControl::getInstance();
+    ArmControl &armcontrol=ArmControl::getInstance();
     Laser &laser=Laser::getInstance();
     laser.init();
-    laser.run(0);
     while(1){
         //最新状態を取得
         statemanage.StateGetter(&movementstate);
@@ -72,8 +71,7 @@ int EngravingControl::InitMove(){
         armcontrol.frontinit(0);
     }
     armcontrol.stop();
-    // 140 do
-    for(int index=0;index<19750;++index){
+    for(int index=0;index<12800;++index){
         armcontrol.frontinit(1);
     }
     
@@ -89,13 +87,8 @@ int EngravingControl::InitMove(){
             return SYS_NG;
         }
         //アーム制御初期化呼び出し
-        armcontrol.backinit(0);
+        armcontrol.backinit();
     }
-    // 25 do
-    for(int index=0;index<2844;++index){
-        armcontrol.backinit(1);
-    }
-    delay(5000);
     return SYS_OK;
 }
 
@@ -128,7 +121,7 @@ int EngravingControl::NomalMove(){
     }
     //アーム制御インスタンス取得
     ArmControl &armcontrol=ArmControl::getInstance();
-    printf("zahyou:%f,%f\n",(double)coordinateindex->x,(double)coordinateindex->y);
+    //printf("zahyou:%f,%f\n",(double)coordinateindex->x,(double)coordinateindex->y);
     //アームに座標引き渡し
     armcontrol.run((double)coordinateindex->x,(double)coordinateindex->y);
     //次の座標リストへ

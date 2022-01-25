@@ -1,11 +1,10 @@
 # distutils: language = c++
-
-from Rectangle cimport LaserEngraving
+from Reactangle cimport LaserEngraving
 
 cdef class PyRectangle:
-    cdef LaserEngraving c_rect  # Hold a C++ instance which we're wrapping
+    cdef LaserEngraving
     cdef char *filename
-    def run(self):
+    def run(self,char _filepath):
+        print(_filepath)
         filename="./test.jpg"
-        return self.c_rect.Run(filename)
-
+           return self.c_rect.Run(filename)

@@ -67,8 +67,8 @@ enum TriggerState
     EMERGENCY_RIGHTDOWN,
 };
 typedef struct CONTOUR_TAG {	
-	double x;
-    double y;
+	int x;
+    int y;
 }CONTOURData;
 
 

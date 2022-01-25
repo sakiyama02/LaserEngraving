@@ -105,25 +105,20 @@ int LaserEngraving::Run(char* _filepath){
     //入力画像IpImage型宣言
     IplImage* inputfile;
     //出力画像IpImage型宣言
-    //IplImage* outputfile;
+    IplImage* outputfile;
     std::map<int,std::list<CONTOURData>> contour;
     //初期化
     Init();
     //輪郭データ取得
     inputimage.Input(_filepath,&inputfile);
-
+    inputimage.ImageContour(outputfile);
     //inputimage.ImageSizeChange(inputfile,&outputfile);
-    inputimage.ImageContour(inputfile);
+    printf("end");
     cvReleaseImage(&inputfile);
-    //cvShowImage ("src", &inputimage);
-
-    //cvWaitKey(0);
-    //cvReleaseImage(&outputfile);
+    cvReleaseImage(&outputfile);
     //輪郭の頂点座標取得
     inputimage.ContourGetter(&contour);
     //彫刻制御のRun
-    //printf("end\n");
-
     engravingcontrol.Run(contour);
     return 0;
 }
