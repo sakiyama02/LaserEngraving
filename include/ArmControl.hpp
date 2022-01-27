@@ -2,43 +2,47 @@
 
 #define PI 3.141592653589793
 
-typedef struct TH{
+typedef struct TH
+{
 	double th0;
 	double th1;
-}TH;
+} TH;
 
-typedef struct DEG{
+typedef struct DEG
+{
 	double deg0;
 	double deg1;
-}DEG;
+} DEG;
 
-
-typedef struct LENGTH{
+typedef struct LENGTH
+{
 	double l0;
 	double l1;
-}LENGTH;
+} LENGTH;
 
-typedef struct POS{
+typedef struct POS
+{
 	double x;
 	double y;
-}POS;
+} POS;
 
-class ArmControl {
-	public:
-
-	int run(double x,double y);
+class ArmControl
+{
+public:
+	int run(double x, double y);
 	int stop();
 	int frontinit(int);
 	int backinit(int);
 	int changeSpeed(char speed);
 
-	static ArmControl& getInstance(){
+	static ArmControl &getInstance()
+	{
 		static ArmControl instance;
 		return instance;
-    }
+	}
 
-	protected:
-	private:
+protected:
+private:
 	ArmControl();
 	~ArmControl();
 	DEG deg;
