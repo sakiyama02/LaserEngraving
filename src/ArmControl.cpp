@@ -71,14 +71,14 @@ int ArmControl::init(int dir,char select)
 	return SYS_OK;
 }
 
-int ArmControl::frontinit(int dir)
+int ArmControl::frontInit(int dir)
 {
 	FrontMotor &fMotor = FrontMotor::getInstance();
 	fMotor.run(1, dir);
 	delay(2);
 	return 1;
 }
-int ArmControl::backinit(int dir)
+int ArmControl::backInit(int dir)
 {
 	BackMotor &bMotor = BackMotor::getInstance();
 	bMotor.run(1, dir);
