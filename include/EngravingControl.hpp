@@ -1,7 +1,11 @@
 #pragma once
-#define SYS_OK 0    //正常終了
-#define SYS_NG 1    //異常終了
-#define SYS_PARAM 2 //引数エラー
+
+#define ARM_INIT_ANGLE_140 19750
+#define ARM_INIT_ANGLE_25 2844
+#define DUTY_RATIO_RUN 80
+#define DUTY_RATIO_STOP 0
+#define LEFT_ROTATE 0
+#define RIGHT_ROTATE 1
 #include "./StateManage.hpp"
 //opencvのライブラリ取得
 #include <opencv2/core/core.hpp>
@@ -20,23 +24,23 @@ class EngravingControl {
         //デストラクタ
         ~EngravingControl();
         //初期化動作
-        int InitMove();
+        int initMove();
         //通常動作
-        int NomalMove();
+        int nomalMove();
         //実行
-        int Run(std::map<int,std::list<CONTOURData>>);
+        int run(std::map<int,std::list<CONTOUR_DATE>>);
         //停止
-        int Stop();
+        int stop();
     private:
         //状態管理インスタンス取得
         StateManage &statemanage=StateManage::getInstance();
-        int movementstate=0;
+        int movement_state=0;
         //すべての輪郭のリスト情報
-        std::map<int,std::list<CONTOURData>> contourdata;
+        std::map<int,std::list<CONTOUR_DATE>> contour_date;
         //頂点のリスト情報
-        std::list<CONTOURData> coordinatedata;
+        std::list<CONTOUR_DATE> coordinate_data;
         //すべての輪郭のリスト情報の索引
-        std::map<int,std::list<CONTOURData>>::iterator contourindex;
+        std::map<int,std::list<CONTOUR_DATE>>::iterator contour_index;
         //頂点座標リスト情報の索引
-        std::list<CONTOURData>::iterator coordinateindex;
+        std::list<CONTOUR_DATE>::iterator coordinate_index;
 };

@@ -13,8 +13,11 @@ using namespace std;
 
 
 //サイズ変更を行いたい数値に変更できる
-#define BASICWIDTH 200
-#define BASICHEIGHT 115
+#define BASIC_WIDTH 200
+#define BASIC_HEIGHT 115
+#define ARM_COODINATE_WIDTH 80
+#define ARM_COODINATE_HEIGHT 70
+
 class InputImage
 {
     public:
@@ -23,17 +26,15 @@ class InputImage
         //デストラクタ
         ~InputImage();
         //画像読み込み
-        int Input(char*,IplImage**);
-        //画像サイズ変換
-        //画像のサイズを指定したサイズ二合わせて拡大縮小を行う
-        int ImageSizeChange(IplImage*,IplImage**);
+        int imageSizeChange(char*,IplImage**);
         //画像の輪郭抽出
         //IpImege型の画像を送信することで変換した値を返す
-        int ImageContour(IplImage*);
-        int ContourGetter(std::map<int,std::list<CONTOURData>>*);
+        int imageContour(IplImage*);
+        int contourGetter(std::map<int,std::list<CONTOUR_DATE>>*);
     private:
-        std::map<int,std::list<CONTOURData>> mp;
+        std::map<int,std::list<CONTOUR_DATE>> contour_map;
         //輪郭最外層の頂点取得
-        int NextContour(CvSeq *Contour,int Contourcnt,IplImage*);
-
+        int nextContour(CvSeq *Contour,int Contourcnt,IplImage*);
+        //画像のサイズを指定したサイズ二合わせて拡大縮小を行う
+        int imageSizeChange(CvSeq *_contour,int _contourcnt, IplImage* _inputimage,CONTOUR_DATE _coordinate);
 };

@@ -6,137 +6,131 @@ EngravingControl::EngravingControl(){}
 //デストラクタ
 EngravingControl::~EngravingControl(){}
 //実行
-int EngravingControl::Run(std::map<int,std::list<CONTOURData>> _contourdata){
+int EngravingControl::run(std::map<int,std::list<CONTOUR_DATE>> _contour_data){
     //引数の輪郭データ取得
-    contourdata=_contourdata;
+    contour_date=_contour_data;
     //輪郭データのイテレーターを設定
-    contourindex=contourdata.begin();
-    coordinatedata=contourindex->second;
-    coordinateindex=coordinatedata.begin();
+    contour_index=contour_date.begin();
+    coordinate_data=contour_index->second;
+    coordinate_index=coordinate_data.begin();
     while(1){
         //最新状態を取得
-        statemanage.StateGetter(&movementstate);
-        switch(movementstate){
+        statemanage.stateGetter(&movement_state);
+        switch(movement_state){
         //準備状態
         case PREPARATION_MODE:
             //待機状態
-            //printf("PREPARATION_MODE");
             break;
         //初期化状態
         case INIT_MODE:
-            printf("INIT_MODE:START");
+            printf("INIT_MODE:START\n");
             //初期化動作
-            InitMove();
-            printf("INIT_MODE:END");
+            initMove();
+            printf("INIT_MODE:END\n");
+            printf("NOMAL_MODE:START");
             break;
         //通常動作状態
         case NOMAL_MODE:
-            //printf("NOMAL_MODE:START");
             //通常動作
-            NomalMove();
-            //printf("NOMAL_MODE:END");
+            nomalMove();
             break;
         //終了動作状態
         case END_MODE:
-            printf("END_MODE:START");
-            Stop();
-            printf("END_MODE:END");
+            printf("NOMAL_MODE:END");
+            printf("END_MODE:START\n");
+            stop();
+            printf("END_MODE:END\n");
             return SYS_OK;
             break;
         default:
             break;
         }
     }
+    return SYS_OK;
 }
 
 //初期化動作
-int EngravingControl::InitMove(){
+int EngravingControl::initMove(){
     printf("initMove run\n");
-    int movementstate=0;
     //アーム制御インスタンス取得
     ArmControl &armcontrol = ArmControl::getInstance();
     Laser &laser=Laser::getInstance();
     laser.init();
-    laser.run(0);
+    stop();
     while(1){
         //最新状態を取得
-        statemanage.StateGetter(&movementstate);
-        if(movementstate==INIT_ARM){
-            Stop();
+        statemanage.stateGetter(&movement_state);
+        if(movement_state==INIT_ARM){
+            stop();
             break;
         }
-        if(movementstate==END_MODE){
+        if(movement_state==END_MODE){
             return SYS_NG;
         }
         //アーム制御初期化呼び出し
-        armcontrol.frontinit(0);
+        armcontrol.frontInit(LEFT_ROTATE);
     }
     armcontrol.stop();
     // 140 do
-    for(int index=0;index<19750;++index){
-        armcontrol.frontinit(1);
+    for(int index=0;index<ARM_INIT_ANGLE_140;++index){
+        armcontrol.frontInit(RIGHT_ROTATE);
     }
     
     while(1){
         //printf("syokika2");
         //最新状態を取得
-        statemanage.StateGetter(&movementstate);
-        if(movementstate==NOMAL_MODE){
-            Stop();
+        statemanage.stateGetter(&movement_state);
+        if(movement_state==NOMAL_MODE){
+            stop();
             break;
         }
-        if(movementstate==END_MODE){
-            return SYS_NG;
+        if(movement_state==END_MODE){
+            return SYS_OK;
         }
         //アーム制御初期化呼び出し
-        armcontrol.backinit(0);
+        armcontrol.backInit(LEFT_ROTATE);
     }
     // 25 do
-    for(int index=0;index<2844;++index){
-        armcontrol.backinit(1);
+    for(int index=0;index<ARM_INIT_ANGLE_25;++index){
+        armcontrol.backInit(RIGHT_ROTATE);
     }
-    delay(5000);
     return SYS_OK;
 }
 
 //正常動作
-int EngravingControl::NomalMove(){
+int EngravingControl::nomalMove(){
     Laser &laser=Laser::getInstance();
-    int duty=80;
     //現在の輪郭の頂点リストを取得し終わったか確認
-    if(coordinateindex==coordinatedata.end()){
+    if(coordinate_index==coordinate_data.end()){
         //次の輪郭へ移行
-        contourindex++;
+        contour_index++;
         //輪郭データの終了確認
-        if(contourindex==contourdata.end()){
+        if(contour_index==contour_date.end()){
             //動作終了
-            statemanage.StateSetter(END_MODE);
+            statemanage.stateSetter(END_MODE);
             return SYS_OK;
         }
         //次の輪郭の頂点のリスト取得
-        coordinatedata=contourindex->second;
-        coordinateindex=coordinatedata.begin();
+        coordinate_data=contour_index->second;
+        coordinate_index=coordinate_data.begin();
         
     }
-    if(coordinateindex==coordinatedata.begin()){
-        //printf("rinkakustart\n");
-        //printf("laser on\n");
+    if(coordinate_index==coordinate_data.begin()){
         laser.stop();
     }else{
-        //printf("laser off\n");
-        laser.run(duty);
+        laser.run(DUTY_RATIO_RUN);
     }
     //アーム制御インスタンス取得
     ArmControl &armcontrol=ArmControl::getInstance();
-    printf("zahyou:%f,%f\n",(double)coordinateindex->x,(double)coordinateindex->y);
     //アームに座標引き渡し
-    armcontrol.run((double)coordinateindex->x,(double)coordinateindex->y);
+    armcontrol.run((double)coordinate_index->x,(double)coordinate_index->y);
     //次の座標リストへ
-    coordinateindex++;
+    coordinate_index++;
+    return SYS_OK;
 }
 
 //停止
-int EngravingControl::Stop(){
+int EngravingControl::stop(){
     ArmControl &armcontrol=ArmControl::getInstance();
     Laser &laser=Laser::getInstance();
     //レーザー停止

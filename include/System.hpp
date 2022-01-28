@@ -69,6 +69,6 @@ enum TriggerState
 typedef struct CONTOUR_TAG {	
 	double x;
     double y;
-}CONTOURData;
+}CONTOUR_DATE;
 
 

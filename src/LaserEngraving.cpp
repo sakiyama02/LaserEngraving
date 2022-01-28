@@ -7,66 +7,65 @@ unsigned int uintPreTime=0;
 void EmergencyInterrupt(){
     uintTime=millis();
     if(500>(uintTime-uintPreTime)){
-	uintPreTime=uintTime;
-	return;
+        uintPreTime=uintTime;
+        return;
     }
-    printf("緊急停止ボタン");
-    StateManage &statemanage=StateManage::getInstance();
-    delay(20);
-    statemanage.TriggerStateSetter(EMERGENCY_SWITCH);
     uintPreTime=uintTime;
+    StateManage &statemanage=StateManage::getInstance();
+    statemanage.triggerStateSetter(EMERGENCY_SWITCH);
+    return;
 }
 //左上アームスイッチ割込み
 void LeftUpInterrupt(){
     uintTime=millis();    
     if(500>(uintTime-uintPreTime)){
-	uintPreTime=uintTime;
-	return;
+	    uintPreTime=uintTime;
+	    return;
     }
+    uintPreTime=uintTime;
     printf("左上アームスイッチ");
     StateManage &statemanage=StateManage::getInstance();
-    delay(20);
-    statemanage.TriggerStateSetter(EMERGENCY_LEFTUP);
-    uintPreTime=uintTime;
+    statemanage.triggerStateSetter(EMERGENCY_LEFTUP);
+    return;
 }
 //左下アームスイッチ割込み
 void LeftDownInterrupt(){
     uintTime=millis();    
     if(500>(uintTime-uintPreTime)){
-	uintPreTime=uintTime;
-	return;
+        uintPreTime=uintTime;
+        return;
     }
+    uintPreTime=uintTime;
     printf("左下アームスイッチ");
     StateManage &statemanage=StateManage::getInstance();
-    delay(50);
-    statemanage.TriggerStateSetter(EMERGENCY_LEFTDOWN);
-    uintPreTime=uintTime;
+    statemanage.triggerStateSetter(EMERGENCY_LEFTDOWN);
+    return;
 }
 //右上アームスイッチ割込み
 void RightUpInterrupt(){
     uintTime=millis();    
     if(500>(uintTime-uintPreTime)){
-	uintPreTime=uintTime;
-	return;
+	    uintPreTime=uintTime;
+	    return;
     }
+    uintPreTime=uintTime;
     printf("右上アームスイッチ");
     StateManage &statemanage=StateManage::getInstance();
-    delay(20);
-    statemanage.TriggerStateSetter(EMERGENCY_RIGHTUP);
-    uintPreTime=uintTime;
+    statemanage.triggerStateSetter(EMERGENCY_RIGHTUP);
+    return;
 }
 //右下アームスイッチ割込み
 void RightDownInterrupt(){
     uintTime=millis();    
     if(500>(uintTime-uintPreTime)){
-	uintPreTime=uintTime;
-	return;
+        uintPreTime=uintTime;
+        return;
     }
+    uintPreTime=uintTime;
     printf("右下アームスイッチ");
     StateManage &statemanage=StateManage::getInstance();
-    delay(20);
-    statemanage.TriggerStateSetter(EMERGENCY_RIGHTDOWN);
-    uintPreTime=uintTime;
+    statemanage.triggerStateSetter(EMERGENCY_RIGHTDOWN);
+    return;
 }
 
 //コンストラクタ
@@ -91,46 +90,38 @@ LaserEngraving::LaserEngraving(){
 	wiringPiISR(SW_PORT6,INT_EDGE_RISING,LeftDownInterrupt);
 	wiringPiISR(SW_PORT13,INT_EDGE_RISING,RightUpInterrupt);
 	wiringPiISR(SW_PORT19,INT_EDGE_RISING,RightDownInterrupt);
-
-
 }
 //デストラクタ
 LaserEngraving::~LaserEngraving(){}
 //実行
-int LaserEngraving::Run(char* _filepath){
+int LaserEngraving::run(char* _filepath){
     //輪郭取得クラス宣言
     InputImage inputimage;
     //彫刻制御クラス宣言
     EngravingControl engravingcontrol;
     //入力画像IpImage型宣言
     IplImage* inputfile;
-    //出力画像IpImage型宣言
-    //IplImage* outputfile;
-    std::map<int,std::list<CONTOURData>> contour;
+    //輪郭情報格納用
+    std::map<int,std::list<CONTOUR_DATE>> contour;
     //初期化
-    Init();
+    init();
     //輪郭データ取得
-    inputimage.Input(_filepath,&inputfile);
+    inputimage.input(_filepath,&inputfile);
+    //輪郭取得
+    inputimage.imageContour(inputfile);
 
-    //inputimage.ImageSizeChange(inputfile,&outputfile);
-    inputimage.ImageContour(inputfile);
     cvReleaseImage(&inputfile);
-    //cvShowImage ("src", &inputimage);
 
-    //cvWaitKey(0);
-    //cvReleaseImage(&outputfile);
     //輪郭の頂点座標取得
-    inputimage.ContourGetter(&contour);
-    //彫刻制御のRun
-    //printf("end\n");
-
-    engravingcontrol.Run(contour);
-    return 0;
+    inputimage.contourGetter(&contour);
+    //彫刻制御のrun
+    engravingcontrol.run(contour);
+    return SYS_OK;
 }
-int LaserEngraving::Init(){
+int LaserEngraving::init(){
     //彫刻制御クラス宣言
     EngravingControl engravingcontrol;
     //彫刻制御を停止
-    engravingcontrol.Stop();
-    return 0;
+    engravingcontrol.stop();
+    return SYS_OK;
 }

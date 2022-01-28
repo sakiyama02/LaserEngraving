@@ -14,8 +14,8 @@ class LaserEngraving {
         //デストラクタ
         ~LaserEngraving();
         //実行
-        int Run(char*);
+        int run(char*);
     private:
         //初期化
-        int Init();
+        int init();
 };

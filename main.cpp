@@ -43,7 +43,7 @@ th arm_th(length L,pos P){
 int main(){
     LaserEngraving laserengraving;
     char* filepath="EWsuIVjVcAAzWh7.jpg";
-    laserengraving.Run(filepath);
+    laserengraving.run(filepath);
     
     /*
     Laser &laser=Laser::getInstance();
