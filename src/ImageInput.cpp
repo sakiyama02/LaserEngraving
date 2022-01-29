@@ -125,6 +125,8 @@ int InputImage::imageContour(IplImage* _inputimage){
         //輪郭の描画
         nextContour( firstcontours, 1,_inputimage);
     }
+    auto it=contour_map.end();
+    contour_map.erase(--it);
 
     //メモリストレージの解放
     cvClearSeq(firstcontours);

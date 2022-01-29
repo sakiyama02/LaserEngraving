@@ -13,7 +13,7 @@
 /* ------------------------------------------------------------------------- */
 /* includeファイル															 */
 /* ------------------------------------------------------------------------- */
-#include "../include/LaserEngraving.hpp"
+#include "../include/EngravingControl.hpp"
 #include "./System.hpp"
 //opencvのライブラリ取得
 #include "./ImageInput.hpp"

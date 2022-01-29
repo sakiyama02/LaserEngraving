@@ -1,4 +1,4 @@
-#include "../include/EngravingControl.hpp"
+#include "../include/LaserEngraving.hpp"
 //割込み処理のチャタリング用タイマー
 unsigned int uintTime=0;
 unsigned int uintPreTime=0;
