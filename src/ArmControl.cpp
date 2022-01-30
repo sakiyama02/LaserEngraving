@@ -24,13 +24,17 @@
 /* ------------------------------------------------------------------------- */
 ArmControl::ArmControl()
 {
-	BackMotor  &bMotor = BackMotor::getInstance();
+	/* ステッピングモータ制御のインスタンス */
+	BackMotor &bMotor = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
-	/* 初期化 */
+	/* 初期化 ---------------------------------------------------------------- */
+	/* アームの長さ */
 	length.l1 = 100;
 	length.l2 = 100;
+	/* ステッピングモータの角度 */
 	degree.deg1 = 0;
 	degree.deg2 = 0;
+	/* 初期化コマンド送信処理 */
 	bMotor.init();
 	fMotor.init();
 }
@@ -46,28 +50,55 @@ ArmControl::~ArmControl() {}
 /* ------------------------------------------------------------------------- */
 int ArmControl::stop()
 {
+	/* ステッピングモータ制御のインスタンス */
 	BackMotor &bMotor = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
+	/* モータを止めるコマンドを送信 */
 	bMotor.stop();
 	fMotor.stop();
 
 	return 1;
 }
 
-
-int ArmControl::init(int dir,char select)
+/* ------------------------------------------------------------------------- */
+/* 関数名		： init														 */
+/* 機能名		： 初期化														 */
+/* 機能概要		： 初期化するモータを選択して、一ステップずつ動かす										 */
+/* 引数			： int				:dir				:方向					 */
+/*				： int				:select				:モータ選択				 */
+/* 戻り値		： int				:SYS_OK				:正常終了				 */
+/*				： int				:SYS_PARAM			:引数エラー			 */
+/* 作成日		： 2022/02/27		 崎山　勇人		 新規作成			 	 */
+/* ------------------------------------------------------------------------- */
+int ArmControl::init(int dir, char select)
 {
+	/* エラーチェック ------------------------------------------------- */
+	/* 方向値が1か0以外の値の場合エラー */
+	if (dir != 1 || dir != 0)
+	{
+		return SYS_PARAM;
+	}
+	if (select != FRONT || select != BACK)
+	{
+		return SYS_PARAM;
+	}
+
+	/* ステッピングモータ制御のインスタンス */
 	FrontMotor &fMotor = FrontMotor::getInstance();
-	BackMotor  &bMotor = BackMotor::getInstance();
+	BackMotor &bMotor = BackMotor::getInstance();
 
 	/* selectの値によって駆動するモータを選ぶ */
-	if( select == FRONT )
+	/* 1ステップずつモータを駆動させる */
+	if (select == FRONT)
 	{
-		fMotor.run( 1, dir );
-	} else {
-		bMotor.run( 1, dir );
+		fMotor.run(1, dir);
 	}
-	delay( 2 );
+	else
+	{
+		bMotor.run(1, dir);
+	}
+	delay(2);
+
 	return SYS_OK;
 }
 
@@ -96,12 +127,12 @@ int ArmControl::backInit(int dir)
 /* ------------------------------------------------------------------------- */
 int ArmControl::run(double x, double y)
 {
-	BackMotor &bMotor  = BackMotor::getInstance();
+	/* ステッピングモータ制御のインスタンス */
+	BackMotor &bMotor = BackMotor::getInstance();
 	FrontMotor &fMotor = FrontMotor::getInstance();
-
+	
+	/* 変数宣言 */
 	POSITION pos;
-	pos.x = x;
-	pos.y = y;
 	// 逆運動学で座標から各ラジアンを取得
 	THETA t = calc(pos);
 	// ラジアンから角度に変換
@@ -113,20 +144,26 @@ int ArmControl::run(double x, double y)
 	int dir2 = 0;
 	int max = 0;
 
-	// 角度からstep数を取得
+	pos.x = x;
+	pos.y = y;
+
+	/* 角度からstep数を取得 */
 	step1 = (int)round((degree0 - degree.deg1) / ONE_MICRO_STEP);
 	step2 = (int)round((degree1 - degree.deg2) / ONE_MICRO_STEP);
-
-	(degree0 - degree.deg1 > 0) ? dir1 = 1 : dir1 = 0;
-	(degree1 - degree.deg2 > 0) ? dir2 = 1 : dir2 = 0;
 	(step1 < 0) ? step1 = -step1 : step1;
 	(step2 < 0) ? step2 = -step2 : step2;
+
+	/* 方向を調べる */
+	(degree0 - degree.deg1 > 0) ? dir1 = 1 : dir1 = 0;
+	(degree1 - degree.deg2 > 0) ? dir2 = 1 : dir2 = 0;
 	degree.deg1 = degree0;
 	degree.deg2 = degree1;
-	// 最大値を取得
+
+	/* ステップ数の最大値を取得 */
 	max = step1;
 	(max < step2) ? max = step2 : max;
-	// 一ステップずつ実行
+
+	/* 一ステップずつ実行 */
 	for (int i = 0; i < max; i++)
 	{
 		if (i < step1)
@@ -147,22 +184,27 @@ int ArmControl::run(double x, double y)
 /* 関数名		： calc														 */
 /* 機能名		： 逆運動													 */
 /* 機能概要		： 逆運動計算を行う											 */
-/* 引数			： POSITION			:				:座標					 */
-/* 戻り値		： THETA			:0				:正常終了				 */
+/* 引数			： POSITION			:pos			:座標					 */
+/* 戻り値		： THETA			:T				:計算結果				 */
 /* 作成日		： 2022/02/27		 崎山　勇人		 新規作成			 	 */
 /* ------------------------------------------------------------------------- */
 THETA ArmControl::calc(POSITION pos)
 {
+	/* 変数宣言 */
 	double x = pos.x;
 	double y = pos.y;
 	double l1 = length.l1;
 	double l2 = length.l2;
+	THETA T;
 
 	double norm = sqrt((pos.x * pos.x) + (pos.y * pos.y));
-
-	THETA T;
+	/* 逆運動計算 */
 	T.th1 = atan2(y, x) - acos(((x * x) + (y * y) + (l1 * l1) - (l1 * l2)) / (2 * l1 * norm));
 	T.th2 = -T.th1 + atan2((y - l1 * sin(T.th1)), (x - l1 * cos(T.th1)));
 
 	return T;
 }
+
+/* ------------------------------------------------------------------------- */
+/*				Copyright HAL College of Technology & Design				 */
+/* ------------------------------------------------------------------------- */

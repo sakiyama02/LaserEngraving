@@ -18,6 +18,7 @@
 #include <iostream>								/* 入出力ライブラリ			 */
 #include <vector>								/* 配列型ライブラリ			 */
 #include <cmath>								/* 計算用ライブラリ			 */
+#include "System.hpp"
 using namespace std;
 
 /* ------------------------------------------------------------------------- */
