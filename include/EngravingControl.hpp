@@ -34,8 +34,7 @@
 #define ARM_INIT_ANGLE_25 2844
 #define DUTY_RATIO_RUN 80
 #define DUTY_RATIO_STOP 0
-#define LEFT_ROTATE 0
-#define RIGHT_ROTATE 1
+
 /* ------------------------------------------------------------------------- */
 /* class宣言																 */
 /* ------------------------------------------------------------------------- */

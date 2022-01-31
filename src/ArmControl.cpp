@@ -102,21 +102,6 @@ int ArmControl::init(int dir, char select)
 	return SYS_OK;
 }
 
-int ArmControl::frontInit(int dir)
-{
-	FrontMotor &fMotor = FrontMotor::getInstance();
-	fMotor.run(1, dir);
-	delay(2);
-	return 1;
-}
-int ArmControl::backInit(int dir)
-{
-	BackMotor &bMotor = BackMotor::getInstance();
-	bMotor.run(1, dir);
-	delay(2);
-	return 1;
-}
-
 /* ------------------------------------------------------------------------- */
 /* 関数名		： run														 */
 /* 機能名		： 実行														 */

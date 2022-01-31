@@ -98,7 +98,7 @@ int EngravingControl::initMove(){
         }
 
         //アーム制御初期化呼び出して下のアームを左向きに動作させる
-        armcontrol.frontInit(LEFT_ROTATE);
+        armcontrol.init(LEFT_ROTATE,FRONT);
     }
 
     //アーム停止
@@ -106,7 +106,7 @@ int EngravingControl::initMove(){
 
     // アームスイッチから正面位置に戻るために行う処理
     for(int index=0;index<ARM_INIT_ANGLE_140;++index){
-        armcontrol.frontInit(RIGHT_ROTATE);
+        armcontrol.init(RIGHT_ROTATE,FRONT);
     }
     
     //上側アームが左上のボタンを押すまでループ
@@ -126,11 +126,11 @@ int EngravingControl::initMove(){
             return SYS_OK;
         }
         //アーム制御初期化呼び出し
-        armcontrol.backInit(LEFT_ROTATE);
+        armcontrol.init(LEFT_ROTATE,BACK);
     }
     // アームスイッチからアーム座標の初期位置に戻るために行う処理
     for(int index=0;index<ARM_INIT_ANGLE_25;++index){
-        armcontrol.backInit(RIGHT_ROTATE);
+        armcontrol.init(RIGHT_ROTATE,BACK);
     }
     return SYS_OK;
 }
