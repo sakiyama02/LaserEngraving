@@ -29,10 +29,10 @@ using namespace std;
 /* ------------------------------------------------------------------------- */
 /* define宣言																 */
 /* ------------------------------------------------------------------------- */
-#define BASIC_WIDTH 200
-#define BASIC_HEIGHT 115
-#define ARM_COODINATE_WIDTH 100
-#define ARM_COODINATE_HEIGHT 70
+#define BASIC_WIDTH 200.0
+#define BASIC_HEIGHT 115.0
+#define ARM_COODINATE_WIDTH 100.0
+#define ARM_COODINATE_HEIGHT 70.0
 /* ------------------------------------------------------------------------- */
 /* class宣言																 */
 /* ------------------------------------------------------------------------- */
@@ -44,13 +44,14 @@ class InputImage
         //デストラクタ
         ~InputImage();
         //画像読み込み
-        int input(char*,IplImage**);
-        //画像の輪郭抽出
-        //IpImege型の画像を送信することで変換した値を返す
-        int imageContour(IplImage*);
+        int input(char*);
+        //輪郭データ取得
         int contourGetter(std::map<int,std::list<CONTOUR_DATE>>*);
     private:
         std::map<int,std::list<CONTOUR_DATE>> contour_map;
+        //画像の輪郭抽出
+        //IpImege型の画像を送信することで変換した値を返す
+        int imageContour(IplImage*);
         //輪郭最外層の頂点取得
         int nextContour(CvSeq *Contour,int Contourcnt,IplImage*);
         //画像のサイズを指定したサイズ二合わせて拡大縮小を行う

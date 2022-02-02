@@ -13,22 +13,25 @@ InputImage::~InputImage(){}
 /* 戻り値       ：int エラーチェック用                                          */
 /* 作成日       ：1月29日、渡部湧也                                             */
 /* -------------------------------------------------------------------------- */
-int InputImage::input(char* _FilePath,IplImage** _inputfile)
+int InputImage::input(char* _FilePath)
 {
     //引数エラー取得
     if(_FilePath==NULL){
         return SYS_PARAM;
     }
-
+    //入力画像IpImage型宣言
+    IplImage* inputfile;
     //画像データの読込（グレースケールで読込）
     //opencv上のエラーで処理の停止を防ぐ
     try{
         //画像情報をグレースケールで取得
-        *_inputfile = cvLoadImage((const char*)_FilePath, CV_LOAD_IMAGE_GRAYSCALE);
+        inputfile = cvLoadImage((const char*)_FilePath, CV_LOAD_IMAGE_GRAYSCALE);
     }catch(cv::Exception& e){
         printf("cvLoadImage:opencv上でエラーが発生");
         return SYS_NG;
     }
+    imageContour(inputfile);
+    cvReleaseImage(&inputfile);
     return SYS_OK;
 }
 
@@ -45,9 +48,9 @@ int InputImage::input(char* _FilePath,IplImage** _inputfile)
 /* -------------------------------------------------------------------------- */
 int InputImage::imageSizeChange(CvSeq *_contour,int _contourcnt, IplImage* _inputimage,CONTOUR_DATE* _coordinate ){
     //計算用変数
-    double calcNum=0;
-    double calcLargeNum=0;
-    double calcSmallNum=0;
+    double calcNum=0.0f;
+    double calcLargeNum=0.0f;
+    double calcSmallNum=0.0f;
 
     //CvPointは構造体で(int x,int y)という構造をしている
     //CV_GET_SEQ_ELEM内では第三引数で指定下CvSeq内に格納された輪郭座標(CvPoint)を抜き出す役割をしている
@@ -81,12 +84,14 @@ int InputImage::imageSizeChange(CvSeq *_contour,int _contourcnt, IplImage* _inpu
         //計算値を座標に反映
         _coordinate->x=((double)point->x/calcNum);
         _coordinate->y=((double)point->y/calcNum);
-    }
-    
-    //計算値が指定座標を超えた場合に走る処理
-    if(_coordinate->x>BASIC_WIDTH||_coordinate->y>BASIC_HEIGHT){
-        _coordinate->x=BASIC_WIDTH;
-        _coordinate->y=BASIC_HEIGHT;
+        //計算値が指定座標を超えた場合に走る処理
+        if(_coordinate->x>BASIC_WIDTH||_coordinate->y>BASIC_HEIGHT){
+            _coordinate->x=BASIC_WIDTH;
+            _coordinate->y=BASIC_HEIGHT;
+        }
+    }else{
+        _coordinate->x=(double)point->x;
+        _coordinate->y=(double)point->y;
     }
     
     //アーム座標との差異を加えた数値計算
@@ -125,6 +130,7 @@ int InputImage::imageContour(IplImage* _inputimage){
         //輪郭の描画
         nextContour( firstcontours, 1,_inputimage);
     }
+    //最終輪郭は画像の外郭になるためここで削除
     auto it=contour_map.end();
     contour_map.erase(--it);
 

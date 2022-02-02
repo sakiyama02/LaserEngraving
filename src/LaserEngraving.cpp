@@ -202,9 +202,6 @@ int LaserEngraving::run(char* _filepath){
     //彫刻制御クラス宣言
     EngravingControl engravingcontrol;
 
-    //入力画像IpImage型宣言
-    IplImage* inputfile;
-
     //輪郭情報格納用
     std::map<int,std::list<CONTOUR_DATE>> contour;
 
@@ -212,13 +209,7 @@ int LaserEngraving::run(char* _filepath){
     init();
 
     //画像データ取得
-    inputimage.input(_filepath,&inputfile);
-
-    //輪郭取得
-    inputimage.imageContour(inputfile);
-
-    //IplImage型のメモリ開放
-    cvReleaseImage(&inputfile);
+    inputimage.input(_filepath);
 
     //生成された輪郭データを取得
     inputimage.contourGetter(&contour);

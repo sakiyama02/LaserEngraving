@@ -47,14 +47,20 @@ enum WorkerState
 {
     //準備状態
     PREPARATION_MODE,
-    //初期化動作状態
-    INIT_MODE,
-    INIT_ARM ,
+    //デバイス系統の初期化状態
+    DEVICEINIT_MODE,
+    //前アームの限界値への移動状態
+    FRONTARM_LIMITSERCH,
+    //左下アーム初期位置への移動状態
+    FRONTARMINIT_MODE ,
+    //後ろアームの限界値への移動状態
+    BACKARM_LIMITSERCH,
+    //左上アーム初期位置への移動状態
+    BACKARMINIT_MODE ,
     //正常運転状態
     NOMAL_MODE,
     //終了状態
     END_MODE,
-
 };
 enum TriggerState
 {

@@ -16,7 +16,7 @@ int StateManage::stateGetter(int* _inputstate){
     if(_inputstate==NULL){
         return SYS_PARAM;
     }
-    memcpy(_inputstate,&curent_state,sizeof(int));
+    *_inputstate=curent_state;
     return SYS_OK;
 }
 /* -------------------------------------------------------------------------- */

@@ -37,12 +37,25 @@ int EngravingControl::run(std::map<int,std::list<CONTOUR_DATE>> _contour_data){
                 //扉、作業ボタン緊急停止が動通時に入る割込みによる状態遷移待機状態
                 break;
             //初期化状態
-            case INIT_MODE:
-                printf("INIT_MODE:START\n");
+            case DEVICEINIT_MODE:
                 //初期化動作(アームの初期座標調整)
                 initMove();
-                printf("INIT_MODE:END\n");
-                printf("NOMAL_MODE:START\n");
+                break;
+            //左下アームの限界点への移動
+            case FRONTARM_LIMITSERCH:
+                limitSercher(LEFT_ROTATE,FRONT);
+                break;
+            //左下アームの初期地点への移動
+            case FRONTARMINIT_MODE:
+                frontArmInit();
+                break;
+            //左上アームの限界点への移動
+            case BACKARM_LIMITSERCH:
+                limitSercher(LEFT_ROTATE,BACK);
+                break;
+            //左上アームの初期化
+            case BACKARMINIT_MODE:
+                backArmInit();
                 break;
             //通常動作状態
             case NOMAL_MODE:
@@ -52,11 +65,8 @@ int EngravingControl::run(std::map<int,std::list<CONTOUR_DATE>> _contour_data){
             //終了動作状態
             case END_MODE:
                 //彫刻終了または緊急停止時に入る状態
-                printf("NOMAL_MODE:END\n");
-                printf("END_MODE:START\n");
                 //アームとレーザーの停止
                 stop();
-                printf("END_MODE:END\n");
                 return SYS_OK;
                 break;
             default:
@@ -80,58 +90,65 @@ int EngravingControl::initMove(){
     //レーザーの初期化処理
     laser.init();
     stop();
-    //下側アームが左下のボタンを押すまでループ
-    while(1){
-        //最新状態を取得
-        statemanage.stateGetter(&movement_state);
-        
-        //状態遷移を待機
-        //INIT_ARMになった場合左下アームが押された判定になる
-        if(movement_state==INIT_ARM){
-            stop();
-            break;
-        }
+    statemanage.stateSetter(FRONTARM_LIMITSERCH);
+    return SYS_OK;
+}
+/* -------------------------------------------------------------------------- */
+/* 関数名       ：limitSercher                                                */
+/* 機能名       ：アームを限界値移動                                         　 */
+/* 機能概要     : アームの限界値に移動するために使用                             */
+/* 引数         : void                                                        */
+/* 戻り値       ：int エラーチェック用                                          */
+/* 作成日       ：1月29日、渡部湧也                                             */
+/* -------------------------------------------------------------------------- */
+int EngravingControl::limitSercher(int dir,char select){
+    //アーム制御インスタンス取得
+    ArmControl &armcontrol = ArmControl::getInstance();
+    armcontrol.manualMode(dir,select);
+    return SYS_OK;
+}
 
-        //初期化動作中に緊急停止が押された場合
-        if(movement_state==END_MODE){
-            return SYS_NG;
-        }
-
-        //アーム制御初期化呼び出して下のアームを左向きに動作させる
-        armcontrol.init(LEFT_ROTATE,FRONT);
-    }
-
+/* -------------------------------------------------------------------------- */
+/* 関数名       ：frontArmInit                                                 */
+/* 機能名       ：先方アームの初期化                                         　 */
+/* 機能概要     : 先方アームを初期位置に移動させる                               */
+/* 引数         : void                                                        */
+/* 戻り値       ：int エラーチェック用                                          */
+/* 作成日       ：1月29日、渡部湧也                                             */
+/* -------------------------------------------------------------------------- */
+int EngravingControl::frontArmInit(){
+    //アーム制御インスタンス取得
+    ArmControl &armcontrol = ArmControl::getInstance();
     //アーム停止
     armcontrol.stop();
 
     // アームスイッチから正面位置に戻るために行う処理
     for(int index=0;index<ARM_INIT_ANGLE_140;++index){
-        armcontrol.init(RIGHT_ROTATE,FRONT);
+        armcontrol.manualMode(RIGHT_ROTATE,FRONT);
     }
-    
-    //上側アームが左上のボタンを押すまでループ
-    while(1){
-        //最新状態を取得
-        statemanage.stateGetter(&movement_state);
+    statemanage.stateSetter(BACKARM_LIMITSERCH);
+    return SYS_OK;
+}
 
-        //状態遷移を待機
-        //NORMAL_MODEになった場合左上アームが押された判定になる
-        if(movement_state==NOMAL_MODE){
-            stop();
-            break;
-        }
+/* -------------------------------------------------------------------------- */
+/* 関数名       ：backArmInit                                                 */
+/* 機能名       ：後方アームの初期化                                         　 */
+/* 機能概要     : 後方アームを初期位置に移動させる                               */
+/* 引数         : void                                                        */
+/* 戻り値       ：int エラーチェック用                                          */
+/* 作成日       ：1月29日、渡部湧也                                             */
+/* -------------------------------------------------------------------------- */
+int EngravingControl::backArmInit(){
+    //アーム制御インスタンス取得
+    ArmControl &armcontrol = ArmControl::getInstance();
+    //アーム停止
+    armcontrol.stop();
 
-        //初期化動作中に緊急停止が押された場合
-        if(movement_state==END_MODE){
-            return SYS_OK;
-        }
-        //アーム制御初期化呼び出し
-        armcontrol.init(LEFT_ROTATE,BACK);
-    }
     // アームスイッチからアーム座標の初期位置に戻るために行う処理
     for(int index=0;index<ARM_INIT_ANGLE_25;++index){
-        armcontrol.init(RIGHT_ROTATE,BACK);
+         armcontrol.manualMode(RIGHT_ROTATE,BACK);
     }
+    statemanage.stateSetter(NOMAL_MODE);
     return SYS_OK;
 }
 

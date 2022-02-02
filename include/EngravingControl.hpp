@@ -44,15 +44,21 @@ class EngravingControl {
         EngravingControl();
         //デストラクタ
         ~EngravingControl();
-        //初期化動作
-        int initMove();
-        //通常動作
-        int nomalMove();
         //実行
         int run(std::map<int,std::list<CONTOUR_DATE>>);
         //停止
         int stop();
     private:
+        //初期化動作
+        int initMove();
+        //アームの限界値に移動
+        int limitSercher(int dir,char select);
+        //前方アームを初期位置に移動
+        int frontArmInit();
+        //後方アームを初期位置に移動
+        int backArmInit();
+        //通常動作
+        int nomalMove();
         //状態管理インスタンス取得
         StateManage &statemanage=StateManage::getInstance();
         int movement_state=0;

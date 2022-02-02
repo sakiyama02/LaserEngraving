@@ -18,16 +18,15 @@
 /* ------------------------------------------------------------------------- */
 /* define宣言																 */
 /* ------------------------------------------------------------------------- */
-#define MAIN_EVENT 5
+#define MAIN_EVENT 8
 #define TRIGGER_EVENT 5
-
+//状態遷移テーブル
 const int state_table[TRIGGER_EVENT][MAIN_EVENT]={
-    //準備状態      左下アーム初期化状態  左上アーム初期化状態     正常運転状態    終了状態
-    {INIT_MODE,    END_MODE            ,END_MODE               ,END_MODE     ,END_MODE},//緊急停止
-    {END_MODE ,    END_MODE            ,NOMAL_MODE             ,END_MODE     ,END_MODE},//アーム(左上)
-    {END_MODE ,    INIT_ARM            ,END_MODE               ,END_MODE     ,END_MODE},//アーム(左下)
-    {END_MODE ,    END_MODE            ,END_MODE               ,END_MODE     ,END_MODE},//アーム(右上)
-    {END_MODE ,    END_MODE            ,END_MODE               ,END_MODE     ,END_MODE},//アーム(右下)
+    {DEVICEINIT_MODE,END_MODE,END_MODE         ,END_MODE  ,END_MODE        ,END_MODE,END_MODE,END_MODE},//緊急停止
+    {END_MODE ,      END_MODE,FRONTARMINIT_MODE,END_MODE  ,END_MODE        ,END_MODE,END_MODE,END_MODE},//アーム(左上)
+    {END_MODE ,      END_MODE,END_MODE         ,END_MODE  ,BACKARMINIT_MODE,END_MODE,END_MODE,END_MODE},//アーム(左下)
+    {END_MODE ,      END_MODE,END_MODE         ,END_MODE  ,END_MODE        ,END_MODE,END_MODE,END_MODE},//アーム(右上)
+    {END_MODE ,      END_MODE,END_MODE         ,END_MODE  ,END_MODE        ,END_MODE,END_MODE,END_MODE},//アーム(右下)
 };
 /* ------------------------------------------------------------------------- */
 /* class宣言																 */
@@ -51,7 +50,7 @@ class StateManage {
         }
     private:
     //現在の状態
-        int curent_state=INIT_MODE;
+       volatile int curent_state=DEVICEINIT_MODE;
 };
 
 /* ------------------------------------------------------------------------- */
