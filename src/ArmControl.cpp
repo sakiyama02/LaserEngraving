@@ -61,16 +61,16 @@ int ArmControl::stop()
 }
 
 /* ------------------------------------------------------------------------- */
-/* 関数名		： init														 */
-/* 機能名		： 初期化														 */
-/* 機能概要		： 初期化するモータを選択して、一ステップずつ動かす										 */
+/* 関数名		： manualMode														 */
+/* 機能名		： マニュアルモード														 */
+/* 機能概要		： モータと方向を選択して、一ステップずつ動かす										 */
 /* 引数			： int				:dir				:方向					 */
 /*				： int				:select				:モータ選択				 */
 /* 戻り値		： int				:SYS_OK				:正常終了				 */
 /*				： int				:SYS_PARAM			:引数エラー			 */
 /* 作成日		： 2022/02/27		 崎山　勇人		 新規作成			 	 */
 /* ------------------------------------------------------------------------- */
-int ArmControl::init(int dir, char select)
+int ArmControl::manualMode(int dir, char select)
 {
 	/* エラーチェック ------------------------------------------------- */
 	/* 方向値が1か0以外の値の場合エラー */
@@ -118,6 +118,8 @@ int ArmControl::run(double x, double y)
 	
 	/* 変数宣言 */
 	POSITION pos;
+	pos.x = x;
+	pos.y = y;
 	// 逆運動学で座標から各ラジアンを取得
 	THETA t = calc(pos);
 	// ラジアンから角度に変換
@@ -128,9 +130,6 @@ int ArmControl::run(double x, double y)
 	int dir1 = 0;
 	int dir2 = 0;
 	int max = 0;
-
-	pos.x = x;
-	pos.y = y;
 
 	/* 角度からstep数を取得 */
 	step1 = (int)round((degree0 - degree.deg1) / ONE_MICRO_STEP);

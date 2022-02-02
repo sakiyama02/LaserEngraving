@@ -68,8 +68,8 @@ public:
 	int run(double x, double y);
 	/* 停止 ---------------------------------------------------------------- */
 	int stop();
-	/* 初期化 -------------------------------------------------------------- */
-	int init(int dir,char select);
+	/* マニュアルモード -------------------------------------------------------------- */
+	int manualMode(int dir,char select);
 
 	/* シングルトン -------------------------------------------------------- */
 	static ArmControl &getInstance()
@@ -88,8 +88,6 @@ private:
 	THETA calc(POSITION pos);
 
 	DEGREE 		degree;							/* アームの角度 			 */
-	POSITION 	arm_pos;						/* アーム座標				 */
-	THETA 		theta;							/* シータ 					 */
 	LENGTH 		length;							/* アームの長さ 			 */
 };
 
