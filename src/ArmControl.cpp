@@ -131,6 +131,11 @@ int ArmControl::run(double x, double y)
 	int dir2 = 0;
 	int max = 0;
 
+	if((degree.deg1+(degree0 - degree.deg1))>=350.0f)
+	{
+		
+	}
+
 	/* 角度からstep数を取得 */
 	step1 = (int)round((degree0 - degree.deg1) / ONE_MICRO_STEP);
 	step2 = (int)round((degree1 - degree.deg2) / ONE_MICRO_STEP);
@@ -180,10 +185,17 @@ THETA ArmControl::calc(POSITION pos)
 	double l1 = length.l1;
 	double l2 = length.l2;
 	THETA T;
+	double temp;
 
 	double norm = sqrt((pos.x * pos.x) + (pos.y * pos.y));
 	/* 逆運動計算 */
+
 	T.th1 = atan2(y, x) - acos(((x * x) + (y * y) + (l1 * l1) - (l1 * l2)) / (2 * l1 * norm));
+	temp = atan2(y, x) + acos(((x * x) + (y * y) + (l1 * l1) - (l1 * l2)) / (2 * l1 * norm));
+	if(T.th1>temp){
+		T.th1=temp;
+	}
+
 	T.th2 = -T.th1 + atan2((y - l1 * sin(T.th1)), (x - l1 * cos(T.th1)));
 
 	return T;
