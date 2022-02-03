@@ -74,11 +74,11 @@ int ArmControl::manualMode(int dir, char select)
 {
 	/* エラーチェック ------------------------------------------------- */
 	/* 方向値が1か0以外の値の場合エラー */
-	if (dir != 1 || dir != 0)
+	if (dir > 1 || dir < 0)
 	{
 		return SYS_PARAM;
 	}
-	if (select != FRONT || select != BACK)
+	if (select > BACK || select < FRONT )
 	{
 		return SYS_PARAM;
 	}
