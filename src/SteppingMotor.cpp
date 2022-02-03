@@ -115,7 +115,7 @@ int SteppingMotor::init()
 	if (wiringPiSPISetup(channel, CLOCK_SPEED) < 0)
 	{
 		cout << "wiringPiSPISetup error\n";
-		return ;
+		return SYS_OK;
 	}
 
 	// レジスタ初期化
