@@ -13,8 +13,8 @@
 /* ------------------------------------------------------------------------- */
 /* includeファイル															 */
 /* ------------------------------------------------------------------------- */
-#include "../include/FrontMotor.hpp"
-#include "../include/BackMotor.hpp"
+#include "../include/MiddleMotor.hpp"
+#include "../include/FixedMotor.hpp"
 #include "../include/System.hpp"
 #include <math.h>
 

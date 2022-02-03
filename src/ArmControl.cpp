@@ -25,8 +25,8 @@
 ArmControl::ArmControl()
 {
 	/* ステッピングモータ制御のインスタンス */
-	BackMotor &bMotor = BackMotor::getInstance();
-	FrontMotor &fMotor = FrontMotor::getInstance();
+	FixedMotor &fixedMotor = FixedMotor::getInstance();
+	MiddleMotor &middleMotor = MiddleMotor::getInstance();
 	/* 初期化 ---------------------------------------------------------------- */
 	/* アームの長さ */
 	length.l1 = 100;
@@ -35,8 +35,8 @@ ArmControl::ArmControl()
 	degree.deg1 = 0;
 	degree.deg2 = 0;
 	/* 初期化コマンド送信処理 */
-	bMotor.init();
-	fMotor.init();
+	fixedMotor.init();
+	middleMotor.init();
 }
 ArmControl::~ArmControl() {}
 
@@ -51,11 +51,11 @@ ArmControl::~ArmControl() {}
 int ArmControl::stop()
 {
 	/* ステッピングモータ制御のインスタンス */
-	BackMotor &bMotor = BackMotor::getInstance();
-	FrontMotor &fMotor = FrontMotor::getInstance();
+	FixedMotor &fixedMotor = FixedMotor::getInstance();
+	MiddleMotor &middleMotor = MiddleMotor::getInstance();
 	/* モータを止めるコマンドを送信 */
-	bMotor.stop();
-	fMotor.stop();
+	fixedMotor.stop();
+	middleMotor.stop();
 
 	return 1;
 }
@@ -84,18 +84,18 @@ int ArmControl::manualMode(int dir, char select)
 	}
 
 	/* ステッピングモータ制御のインスタンス */
-	FrontMotor &fMotor = FrontMotor::getInstance();
-	BackMotor &bMotor = BackMotor::getInstance();
+	MiddleMotor &middleMotor = MiddleMotor::getInstance();
+	FixedMotor &fixedMotor = FixedMotor::getInstance();
 
 	/* selectの値によって駆動するモータを選ぶ */
 	/* 1ステップずつモータを駆動させる */
 	if (select == FRONT)
 	{
-		fMotor.run(1, dir);
+		middleMotor.run(1, dir);
 	}
 	else
 	{
-		bMotor.run(1, dir);
+		fixedMotor.run(1, dir);
 	}
 	delay(2);
 
@@ -113,8 +113,8 @@ int ArmControl::manualMode(int dir, char select)
 int ArmControl::run(double x, double y)
 {
 	/* ステッピングモータ制御のインスタンス */
-	BackMotor &bMotor = BackMotor::getInstance();
-	FrontMotor &fMotor = FrontMotor::getInstance();
+	FixedMotor &fixedMotor = FixedMotor::getInstance();
+	MiddleMotor &middleMotor = MiddleMotor::getInstance();
 	
 	/* 変数宣言 */
 	POSITION pos;
@@ -152,11 +152,11 @@ int ArmControl::run(double x, double y)
 	{
 		if (i < step1)
 		{
-			bMotor.run(1, dir1);
+			fixedMotor.run(1, dir1);
 		}
 		if (i < step2)
 		{
-			fMotor.run(1, dir2);
+			middleMotor.run(1, dir2);
 		}
 		delay(2);
 	}
